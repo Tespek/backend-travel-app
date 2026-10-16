@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminTravel\RouteController;
 use App\Http\Controllers\AdminTravel\ScheduleController;
 use App\Http\Controllers\AdminTravel\DriverController;
 use App\Http\Controllers\AdminTravel\OperatorProfileController;
+use App\Http\Controllers\AdminTravel\VehicleController;
 use App\Http\Controllers\SuperAdmin\OperatorController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,9 @@ Route::middleware(['auth', 'role:admin_travel'])
         Route::get('operator-profile', [OperatorProfileController::class, 'show'])->name('operator-profile.show');
         Route::patch('operator-profile', [OperatorProfileController::class, 'update'])->name('operator-profile.update');
 
+        // Armada Kendaraan
+        Route::resource('vehicles', VehicleController::class)->except(['show']);
+
         // Rute Perjalanan
         Route::resource('routes', RouteController::class)
             ->except(['show']);
@@ -59,7 +63,6 @@ Route::middleware(['auth', 'role:admin_travel'])
             ->parameters(['drivers' => 'driver']); // binding key: /drivers/{driver}
 
         // Placeholder untuk fitur lain yang akan dibangun
-        // Route::resource('vehicles', VehicleController::class)->except(['show']);
         // Route::resource('pickup-points', PickupPointController::class)->except(['show']);
         // Route::resource('bookings', BookingController::class)->only(['index', 'show']);
     });
