@@ -90,9 +90,11 @@ Route::middleware(['auth', 'role:super_admin'])
         Route::resource('operators', OperatorController::class);
 
         // Kota & Wilayah Operasional
+        Route::delete('cities/{city}/districts/{district}', [CityController::class, 'destroyDistrict'])->name('cities.districts.destroy');
         Route::resource('cities', CityController::class)->except(['show']);
 
         // Manajemen User Seluruh Platform
+        Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::resource('users', UserController::class);
 
         // Semua Pemesanan di Seluruh Operator

@@ -18,6 +18,7 @@ class UserController extends Controller
     {
         $role = $request->query('role');
         $status = $request->query('status');
+        $operatorId = $request->query('operator_id');
         $search = $request->query('search');
 
         $query = User::query()->with('operator');
@@ -28,6 +29,10 @@ class UserController extends Controller
 
         if ($status && in_array($status, ['active', 'banned'])) {
             $query->where('status', $status);
+        }
+
+        if ($operatorId) {
+            $query->where('operator_id', $operatorId);
         }
 
         if ($search) {
@@ -48,7 +53,9 @@ class UserController extends Controller
             'customer'     => User::where('role', 'customer')->count(),
         ];
 
-        return view('super-admin.users.index', compact('users', 'counts', 'role', 'status', 'search'));
+        $operators = Operator::orderBy('name')->get();
+
+        return view('super-admin.users.index', compact('users', 'counts', 'role', 'status', 'operatorId', 'operators', 'search'));
     }
 
     /**
@@ -128,6 +135,48 @@ class UserController extends Controller
 
         return redirect()->route('super-admin.users.index')
             ->with('success', "Data pengguna '{$user->name}' berhasil diperbarui.");
+    }
+
+    /**
+     * Tampilkan detail pengguna dan aktivitasnya.
+     */
+    public function show(User $user)
+    {
+        $user->load('operator');
+
+        $bookings = collect();
+        if ($user->role === 'customer') {
+            $bookings = $user->bookings()
+                ->with(['operator', 'schedule.route.originCity', 'schedule.route.destinationCity'])
+                ->latest()
+                ->take(10)
+                ->get();
+        } elseif ($user->role === 'driver') {
+            $bookings = $user->driverAssignments()
+                ->with(['operator', 'schedule.route.originCity', 'schedule.route.destinationCity'])
+                ->latest()
+                ->take(10)
+                ->get();
+        }
+
+        return view('super-admin.users.show', compact('user', 'bookings'));
+    }
+
+    /**
+     * Aksi cepat aktifkan atau blokir akun pengguna.
+     */
+    public function toggleStatus(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak dapat mengubah status akun Anda sendiri.');
+        }
+
+        $newStatus = $user->status === 'active' ? 'banned' : 'active';
+        $user->update(['status' => $newStatus]);
+
+        $statusText = $newStatus === 'active' ? 'diaktifkan kembali' : 'diblokir';
+
+        return back()->with('success', "Akun pengguna '{$user->name}' berhasil {$statusText}.");
     }
 
     /**

@@ -180,4 +180,15 @@ class CityController extends Controller
         return redirect()->route('super-admin.cities.index')
             ->with('success', "Kota '{$city->name}' berhasil dihapus.");
     }
+
+    /**
+     * Hapus satu kecamatan dari kota layanan.
+     */
+    public function destroyDistrict(City $city, District $district)
+    {
+        $districtName = $district->name;
+        $district->delete();
+
+        return back()->with('success', "Kecamatan '{$districtName}' berhasil dihapus.");
+    }
 }

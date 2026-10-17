@@ -32,7 +32,7 @@
                 <tbody class="divide-y divide-slate-100">
                     @forelse($schedules as $schedule)
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 text-slate-400 text-xs">{{ $loop->start + 1 }}</td>
+                        <td class="px-6 py-4 text-slate-400 text-xs font-mono">{{ ($schedules->currentPage() - 1) * $schedules->perPage() + $loop->iteration }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-1.5 font-medium text-slate-800">
                                 {{ $schedule->route->originCity->name }}

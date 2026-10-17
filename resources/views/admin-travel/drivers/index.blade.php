@@ -31,7 +31,7 @@
                 <tbody class="divide-y divide-slate-100">
                     @forelse($drivers as $driver)
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 text-slate-400 text-xs">{{ $loop->start + 1 }}</td>
+                        <td class="px-6 py-4 text-slate-400 text-xs font-mono">{{ ($drivers->currentPage() - 1) * $drivers->perPage() + $loop->iteration }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">

@@ -7,6 +7,62 @@
             <h1 class="text-2xl font-bold text-slate-800">Laporan & Statistik Platform</h1>
             <p class="text-sm text-slate-500 mt-1">Rekapitulasi total pendapatan transaksi tiket lunas dan performa masing-masing mitra travel.</p>
         </div>
+        <button type="button" onclick="window.print()"
+                class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors shadow-sm self-start sm:self-auto">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            </svg>
+            Cetak Laporan
+        </button>
+    </div>
+
+    <!-- Filter Bar (Operator & Tanggal) -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6 p-4 print:hidden">
+        <form action="{{ route('super-admin.reports.index') }}" method="GET" class="flex flex-col lg:flex-row items-end gap-3 justify-between">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto flex-1">
+                <!-- Filter Mitra -->
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Mitra Operator</label>
+                    <select name="operator_id" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Semua Operator Mitra</option>
+                        @foreach($operators as $op)
+                            <option value="{{ $op->id }}" {{ $operatorId == $op->id ? 'selected' : '' }}>
+                                {{ $op->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Dari Tanggal -->
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Dari Tanggal</label>
+                    <input type="date" name="start_date" value="{{ $startDate }}"
+                           class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Sampai Tanggal -->
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Sampai Tanggal</label>
+                    <input type="date" name="end_date" value="{{ $endDate }}"
+                           class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <!-- Submit & Reset Buttons -->
+            <div class="flex items-center gap-2 self-end w-full sm:w-auto">
+                <button type="submit"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-1 sm:flex-none">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                    Terapkan Filter
+                </button>
+                @if($operatorId || $startDate || $endDate)
+                <a href="{{ route('super-admin.reports.index') }}"
+                   class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-lg transition-colors">
+                    Reset
+                </a>
+                @endif
+            </div>
+        </form>
     </div>
 
     <!-- Ringkasan Kartu Metrik -->

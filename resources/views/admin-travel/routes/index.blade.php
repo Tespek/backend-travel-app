@@ -33,7 +33,7 @@
                 <tbody class="divide-y divide-slate-100">
                     @forelse($routes as $route)
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 text-slate-400 text-xs">{{ $loop->start + 1 }}</td>
+                        <td class="px-6 py-4 text-slate-400 text-xs font-mono">{{ ($routes->currentPage() - 1) * $routes->perPage() + $loop->iteration }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <span class="font-semibold text-slate-800">{{ $route->originCity->name }}</span>

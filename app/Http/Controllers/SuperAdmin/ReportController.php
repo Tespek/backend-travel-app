@@ -32,8 +32,30 @@ class ReportController extends Controller
             $query->whereDate('created_at', '<=', $endDate);
         }
 
-        $totalRevenue = (clone $query)->sum('total_price');
+        $totalGross = (clone $query)->sum('total_price');
         $totalTickets = (clone $query)->count();
+        $totalPlatformFee = round($totalGross * 0.05); // 5% komisi platform
+        $totalNetOperators = $totalGross - $totalPlatformFee;
+
+        // Riwayat Transaksi Global (Pagination)
+        $globalTransactions = (clone $query)
+            ->with(['operator', 'user', 'schedule.route.originCity', 'schedule.route.destinationCity'])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        // 6 Bulan Terakhir Komisi Platform (Bar Chart)
+        $chartMonths = [];
+        $chartFees = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $dt = now()->copy()->subMonths($i);
+            $chartMonths[] = $dt->isoFormat('MMM Y');
+            $grossMonth = Booking::where('payment_status', 'paid')
+                ->whereYear('created_at', $dt->year)
+                ->whereMonth('created_at', $dt->month)
+                ->sum('total_price');
+            $chartFees[] = round($grossMonth * 0.05);
+        }
 
         // Statistik per operator
         $operatorReports = Operator::withCount([
@@ -50,6 +72,19 @@ class ReportController extends Controller
 
         $operators = Operator::orderBy('name')->get();
 
-        return view('super-admin.reports.index', compact('totalRevenue', 'totalTickets', 'operatorReports', 'operators', 'operatorId', 'startDate', 'endDate'));
+        return view('super-admin.reports.index', compact(
+            'totalGross',
+            'totalTickets',
+            'totalPlatformFee',
+            'totalNetOperators',
+            'globalTransactions',
+            'chartMonths',
+            'chartFees',
+            'operatorReports',
+            'operators',
+            'operatorId',
+            'startDate',
+            'endDate'
+        ));
     }
 }

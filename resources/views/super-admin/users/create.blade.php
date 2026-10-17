@@ -29,7 +29,7 @@
         </div>
         @endif
 
-        <form action="{{ route('super-admin.users.store') }}" method="POST" class="space-y-6" x-data="{ selectedRole: '{{ old('role', 'customer') }}' }">
+        <form action="{{ route('super-admin.users.store') }}" method="POST" class="space-y-6" x-data="{ selectedRole: '{{ old('role', request('role', 'customer')) }}' }">
             @csrf
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-5">
@@ -40,7 +40,7 @@
                             Nama Lengkap <span class="text-rose-500">*</span>
                         </label>
                         <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                               class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Email -->
@@ -49,7 +49,7 @@
                             Alamat Email <span class="text-rose-500">*</span>
                         </label>
                         <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                               class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Nomor Telepon -->
@@ -58,7 +58,7 @@
                             Nomor Telepon / WhatsApp
                         </label>
                         <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
-                               class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Peran (Role) -->
@@ -84,7 +84,7 @@
                                 class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">-- Pilih Mitra Operator --</option>
                             @foreach($operators as $op)
-                                <option value="{{ $op->id }}" {{ old('operator_id') == $op->id ? 'selected' : '' }}>
+                                <option value="{{ $op->id }}" {{ old('operator_id', request('operator_id')) == $op->id ? 'selected' : '' }}>
                                     {{ $op->name }}
                                 </option>
                             @endforeach

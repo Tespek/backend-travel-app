@@ -69,8 +69,14 @@
                         </label>
                         <div class="flex flex-wrap gap-1.5 p-3 rounded-lg bg-slate-50 border border-slate-200 min-h-[48px]">
                             @forelse($city->districts as $district)
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-white text-slate-700 border border-slate-200 shadow-2xs">
-                                    {{ $district->name }}
+                                <span class="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 rounded-md text-xs font-medium bg-white text-slate-700 border border-slate-200 shadow-2xs group">
+                                    <span>{{ $district->name }}</span>
+                                    <button type="button"
+                                            onclick="if(confirm('Hapus kecamatan \'{{ $district->name }}\'?')) { document.getElementById('delete-district-{{ $district->id }}').submit(); }"
+                                            class="w-4 h-4 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors"
+                                            title="Hapus Kecamatan">
+                                        &times;
+                                    </button>
                                 </span>
                             @empty
                                 <span class="text-xs text-slate-400 italic">Belum ada kecamatan yang ditambahkan untuk kota ini.</span>
@@ -118,5 +124,14 @@
                 </button>
             </div>
         </form>
+
+        @foreach($city->districts as $district)
+            <form id="delete-district-{{ $district->id }}"
+                  action="{{ route('super-admin.cities.districts.destroy', [$city, $district]) }}"
+                  method="POST" class="hidden">
+                @csrf
+                @method('DELETE')
+            </form>
+        @endforeach
     </div>
 </x-app-layout>
