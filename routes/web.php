@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AdminTravel\RouteController;
-use App\Http\Controllers\AdminTravel\ScheduleController;
+use App\Http\Controllers\AdminTravel\BookingController as AdminBookingController;
 use App\Http\Controllers\AdminTravel\DriverController;
 use App\Http\Controllers\AdminTravel\OperatorProfileController;
-use App\Http\Controllers\AdminTravel\VehicleController;
 use App\Http\Controllers\AdminTravel\PickupPointController;
-use App\Http\Controllers\AdminTravel\BookingController as AdminBookingController;
-use App\Http\Controllers\SuperAdmin\OperatorController;
-use App\Http\Controllers\SuperAdmin\CityController;
-use App\Http\Controllers\SuperAdmin\UserController;
+use App\Http\Controllers\AdminTravel\ReportController as AdminTravelReportController;
+use App\Http\Controllers\AdminTravel\RouteController;
+use App\Http\Controllers\AdminTravel\ScheduleController;
+use App\Http\Controllers\AdminTravel\VehicleController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin\BookingController as SuperAdminBookingController;
+use App\Http\Controllers\SuperAdmin\CityController;
+use App\Http\Controllers\SuperAdmin\OperatorController;
 use App\Http\Controllers\SuperAdmin\ReportController;
+use App\Http\Controllers\SuperAdmin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,7 +50,7 @@ Route::middleware(['auth', 'role:admin_travel'])
     ->name('admin-travel.')
     ->group(function () {
 
-        // Profil & Unggah Dokumen KTP/SIUP Travel
+        // Profil Operator Travel
         Route::get('operator-profile', [OperatorProfileController::class, 'show'])->name('operator-profile.show');
         Route::patch('operator-profile', [OperatorProfileController::class, 'update'])->name('operator-profile.update');
 
@@ -74,6 +75,9 @@ Route::middleware(['auth', 'role:admin_travel'])
         Route::post('bookings/{booking}/assign-driver', [AdminBookingController::class, 'assignDriver'])->name('bookings.assign-driver');
         Route::post('bookings/{booking}/update-status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
         Route::resource('bookings', AdminBookingController::class)->only(['index', 'show']);
+
+        // Laporan Keuangan & Pendapatan
+        Route::get('reports', [AdminTravelReportController::class, 'index'])->name('reports.index');
     });
 
 /*
@@ -85,7 +89,7 @@ Route::middleware(['auth', 'role:super_admin'])
     ->prefix('super-admin')
     ->name('super-admin.')
     ->group(function () {
-        // Operator Travel & Verifikasi Dokumen KTP/SIUP
+        // Operator Travel & Persetujuan Akun
         Route::post('operators/{operator}/status', [OperatorController::class, 'updateStatus'])->name('operators.status');
         Route::resource('operators', OperatorController::class);
 
@@ -105,6 +109,3 @@ Route::middleware(['auth', 'role:super_admin'])
     });
 
 require __DIR__.'/auth.php';
-
-
-

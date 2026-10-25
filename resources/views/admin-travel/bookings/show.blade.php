@@ -168,7 +168,7 @@
                     <div>
                         <p class="text-slate-400">Rute Perjalanan:</p>
                         <p class="font-bold text-slate-900 text-sm mt-0.5">
-                            {{ $booking->schedule->route->originCity->name ?? '-' }} → {{ $booking->schedule->route->destinationCity->name ?? '-' }}
+                            {{ $booking->schedule->route->origin_name ?? '-' }} → {{ $booking->schedule->route->destination_name ?? '-' }}
                         </p>
                     </div>
                     <div>

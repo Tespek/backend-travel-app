@@ -11,6 +11,8 @@ class Route extends Model
 
     protected $fillable = [
         'operator_id',
+        'origin',
+        'destination',
         'origin_city_id',
         'destination_city_id',
         'price',
@@ -41,5 +43,15 @@ class Route extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function getOriginNameAttribute(): string
+    {
+        return $this->origin ?: ($this->originCity?->name ?? '-');
+    }
+
+    public function getDestinationNameAttribute(): string
+    {
+        return $this->destination ?: ($this->destinationCity?->name ?? '-');
     }
 }

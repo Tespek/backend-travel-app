@@ -80,9 +80,9 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-                                <span>{{ $b->schedule->route->originCity->name ?? '-' }}</span>
+                                <span>{{ $b->schedule->route->origin_name ?? '-' }}</span>
                                 <span class="text-slate-400">→</span>
-                                <span>{{ $b->schedule->route->destinationCity->name ?? '-' }}</span>
+                                <span>{{ $b->schedule->route->destination_name ?? '-' }}</span>
                             </div>
                             <p class="text-xs text-blue-600 font-medium mt-0.5">
                                 {{ \Carbon\Carbon::parse($b->schedule->departure_time)->isoFormat('D MMM Y · HH:mm') }} WIB

@@ -1,18 +1,7 @@
 <x-app-layout>
     <x-slot name="header">Operator Travel</x-slot>
 
-    <div class="space-y-6" x-data="{ 
-        previewModal: false, 
-        modalTitle: '', 
-        modalUrl: '', 
-        isPdf: false,
-        openPreview(title, url, isPdfFile) {
-            this.modalTitle = title;
-            this.modalUrl = url;
-            this.isPdf = isPdfFile;
-            this.previewModal = true;
-        }
-    }">
+    <div class="space-y-6">
 
         <!-- Header Platform Level -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -23,14 +12,14 @@
                     </span>
                 </div>
                 <h1 class="text-2xl font-heading font-black text-slate-900">Mitra Operator Travel</h1>
-                <p class="text-xs text-slate-500 mt-0.5">Kelola data mitra travel, verifikasi legalitas (KTP & SIUP/NIB), dan audit kesiapan operasional.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Kelola data mitra travel, status verifikasi akun, dan audit kesiapan operasional.</p>
             </div>
             <a href="{{ route('super-admin.operators.create') }}"
                class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/20 self-start sm:self-auto">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                + Tambah Operator Manual
+                Tambah Operator Manual
             </a>
         </div>
 
@@ -94,7 +83,6 @@
                             <th class="py-3.5 px-5">#</th>
                             <th class="py-3.5 px-5">Mitra Operator</th>
                             <th class="py-3.5 px-5">Pemilik / Kontak</th>
-                            <th class="py-3.5 px-5">Dokumen Legalitas</th>
                             <th class="py-3.5 px-5">Status Verifikasi</th>
                             <th class="py-3.5 px-5">Kapasitas</th>
                             <th class="py-3.5 px-5 text-right">Aksi</th>
@@ -128,41 +116,6 @@
                                 <p class="text-[11px] text-slate-500 mt-0.5">{{ $operator->phone ?? '-' }}</p>
                             </td>
                             <td class="py-4 px-5">
-                                <div class="flex flex-col gap-1.5">
-                                    <!-- KTP Preview Button -->
-                                    @if($operator->document_ktp)
-                                        @php
-                                            $ktpUrl = Storage::url($operator->document_ktp);
-                                            $isKtpPdf = strtolower(pathinfo($operator->document_ktp, PATHINFO_EXTENSION)) === 'pdf';
-                                        @endphp
-                                        <button type="button" 
-                                                @click="openPreview('Scan KTP Pemilik - {{ $operator->name }}', '{{ $ktpUrl }}', {{ $isKtpPdf ? 'true' : 'false' }})"
-                                                class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-indigo-700 hover:text-indigo-900 hover:underline">
-                                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                            KTP Terunggah (Preview)
-                                        </button>
-                                    @else
-                                        <span class="text-[11px] text-slate-400 italic">KTP: Belum ada</span>
-                                    @endif
-
-                                    <!-- SIUP Preview Button -->
-                                    @if($operator->document_siup)
-                                        @php
-                                            $siupUrl = Storage::url($operator->document_siup);
-                                            $isSiupPdf = strtolower(pathinfo($operator->document_siup, PATHINFO_EXTENSION)) === 'pdf';
-                                        @endphp
-                                        <button type="button" 
-                                                @click="openPreview('Berkas SIUP/NIB - {{ $operator->name }}', '{{ $siupUrl }}', {{ $isSiupPdf ? 'true' : 'false' }})"
-                                                class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-violet-700 hover:text-violet-900 hover:underline">
-                                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                            SIUP Terunggah (Preview)
-                                        </button>
-                                    @else
-                                        <span class="text-[11px] text-slate-400 italic">SIUP: Belum ada</span>
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="py-4 px-5">
                                 @if($operator->verification_status === 'verified')
                                     <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-2.5 py-1 rounded-full">
                                         <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Terverifikasi
@@ -184,7 +137,7 @@
                             <td class="py-4 px-5 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
                                     <a href="{{ route('super-admin.operators.show', $operator) }}"
-                                       class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs transition-colors flex items-center gap-1" title="Tinjau Berkas & Verifikasi">
+                                       class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs transition-colors flex items-center gap-1" title="Tinjau & Verifikasi">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                         Review
                                     </a>
@@ -204,7 +157,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="py-12 text-center">
+                            <td colspan="6" class="py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
@@ -224,46 +177,6 @@
                 {{ $operators->links() }}
             </div>
             @endif
-        </div>
-
-        <!-- ==================== QUICK DOCUMENT PREVIEW MODAL ==================== -->
-        <div x-show="previewModal" x-cloak 
-             class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-            <div @click.away="previewModal = false" 
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 scale-95"
-                 x-transition:enter-end="opacity-100 scale-100"
-                 class="bg-white rounded-2xl max-w-2xl w-full p-6 text-slate-800 shadow-2xl relative border border-slate-200">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-                    <h3 class="font-heading font-bold text-sm text-slate-900" x-text="modalTitle"></h3>
-                    <div class="flex items-center gap-2">
-                        <a :href="modalUrl" target="_blank" class="text-xs text-indigo-600 hover:underline font-semibold">
-                            Buka di Tab Baru ↗
-                        </a>
-                        <button @click="previewModal = false" class="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="min-h-[300px] max-h-[500px] flex items-center justify-center bg-slate-50 rounded-xl overflow-hidden p-2 border border-slate-200">
-                    <template x-if="!isPdf">
-                        <img :src="modalUrl" alt="Preview Dokumen" class="max-h-[460px] object-contain rounded-lg shadow-sm">
-                    </template>
-                    <template x-if="isPdf">
-                        <div class="text-center p-6">
-                            <svg class="w-16 h-16 text-rose-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                            </svg>
-                            <p class="font-bold text-sm text-slate-800">Dokumen Berformat PDF</p>
-                            <p class="text-xs text-slate-500 mt-1 mb-4">Klik tombol di bawah untuk membaca dokumen PDF secara penuh.</p>
-                            <a :href="modalUrl" target="_blank" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors">
-                                Unduh / Lihat File PDF
-                            </a>
-                        </div>
-                    </template>
-                </div>
-            </div>
         </div>
 
     </div>

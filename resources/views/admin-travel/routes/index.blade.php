@@ -36,11 +36,11 @@
                         <td class="px-6 py-4 text-slate-400 text-xs font-mono">{{ ($routes->currentPage() - 1) * $routes->perPage() + $loop->iteration }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
-                                <span class="font-semibold text-slate-800">{{ $route->originCity->name }}</span>
+                                <span class="font-semibold text-slate-800">{{ $route->origin_name }}</span>
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                                 </svg>
-                                <span class="font-semibold text-slate-800">{{ $route->destinationCity->name }}</span>
+                                <span class="font-semibold text-slate-800">{{ $route->destination_name }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4 font-semibold text-green-600">

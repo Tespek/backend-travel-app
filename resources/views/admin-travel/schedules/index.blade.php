@@ -35,11 +35,11 @@
                         <td class="px-6 py-4 text-slate-400 text-xs font-mono">{{ ($schedules->currentPage() - 1) * $schedules->perPage() + $loop->iteration }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-1.5 font-medium text-slate-800">
-                                {{ $schedule->route->originCity->name }}
+                                {{ $schedule->route->origin_name }}
                                 <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                                 </svg>
-                                {{ $schedule->route->destinationCity->name }}
+                                {{ $schedule->route->destination_name }}
                             </div>
                             <div class="text-xs text-green-600 font-medium mt-0.5">
                                 Rp {{ number_format($schedule->route->price, 0, ',', '.') }}

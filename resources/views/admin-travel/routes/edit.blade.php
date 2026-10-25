@@ -17,40 +17,28 @@
 
                 <!-- Kota Asal -->
                 <div>
-                    <label for="origin_city_id" class="block text-sm font-medium text-slate-700 mb-1.5">
+                    <label for="origin" class="block text-sm font-medium text-slate-700 mb-1.5">
                         Kota Asal <span class="text-red-500">*</span>
                     </label>
-                    <select name="origin_city_id" id="origin_city_id"
-                            class="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('origin_city_id') border-red-400 @enderror">
-                        <option value="">-- Pilih Kota Asal --</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}"
-                                {{ old('origin_city_id', $route->origin_city_id) == $city->id ? 'selected' : '' }}>
-                                {{ $city->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('origin_city_id')
+                    <input type="text" name="origin" id="origin"
+                           value="{{ old('origin', $route->origin_name) }}"
+                           placeholder="cth: Jakarta, Medan, Lhokseumawe"
+                           class="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('origin') border-red-400 @enderror">
+                    @error('origin')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Kota Tujuan -->
                 <div>
-                    <label for="destination_city_id" class="block text-sm font-medium text-slate-700 mb-1.5">
+                    <label for="destination" class="block text-sm font-medium text-slate-700 mb-1.5">
                         Kota Tujuan <span class="text-red-500">*</span>
                     </label>
-                    <select name="destination_city_id" id="destination_city_id"
-                            class="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('destination_city_id') border-red-400 @enderror">
-                        <option value="">-- Pilih Kota Tujuan --</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}"
-                                {{ old('destination_city_id', $route->destination_city_id) == $city->id ? 'selected' : '' }}>
-                                {{ $city->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('destination_city_id')
+                    <input type="text" name="destination" id="destination"
+                           value="{{ old('destination', $route->destination_name) }}"
+                           placeholder="cth: Bandung, Banda Aceh, Takengon"
+                           class="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('destination') border-red-400 @enderror">
+                    @error('destination')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>

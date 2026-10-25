@@ -150,9 +150,6 @@
                     </h3>
                     <p class="text-xs text-slate-500 mt-0.5">Maksimal 10 aktivitas transaksi terbaru.</p>
                 </div>
-                <a href="{{ route('super-admin.bookings.index') }}" class="text-xs font-semibold text-blue-600 hover:text-blue-700">
-                    Lihat Semua Transaksi →
-                </a>
             </div>
 
             <div class="overflow-x-auto">
@@ -178,7 +175,7 @@
                                 {{ $b->operator->name ?? '-' }}
                             </td>
                             <td class="px-6 py-4 text-xs font-semibold text-slate-800">
-                                {{ $b->schedule->route->originCity->name ?? '-' }} → {{ $b->schedule->route->destinationCity->name ?? '-' }}
+                                {{ $b->schedule->route->origin_name ?? '-' }} → {{ $b->schedule->route->destination_name ?? '-' }}
                             </td>
                             <td class="px-6 py-4 text-xs text-slate-600">
                                 {{ \Carbon\Carbon::parse($b->schedule->departure_time)->isoFormat('D MMM Y · HH:mm') }}

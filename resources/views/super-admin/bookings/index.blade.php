@@ -85,7 +85,7 @@
                         </td>
                         <td class="px-6 py-4 text-xs">
                             <p class="font-semibold text-slate-800">
-                                {{ $b->schedule->route->originCity->name ?? '-' }} → {{ $b->schedule->route->destinationCity->name ?? '-' }}
+                                {{ $b->schedule->route->origin_name ?? '-' }} → {{ $b->schedule->route->destination_name ?? '-' }}
                             </p>
                             <p class="text-[11px] text-blue-600">
                                 {{ \Carbon\Carbon::parse($b->schedule->departure_time)->isoFormat('D MMM Y · HH:mm') }}

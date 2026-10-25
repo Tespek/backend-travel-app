@@ -10,7 +10,7 @@
                 <span class="text-slate-800 font-medium">Tambah Baru</span>
             </nav>
             <h1 class="text-2xl font-bold text-slate-800">Tambah Operator Travel</h1>
-            <p class="text-sm text-slate-500 mt-1">Daftarkan operator mitra travel baru beserta dokumen legalitas (KTP & SIUP).</p>
+            <p class="text-sm text-slate-500 mt-1">Daftarkan operator mitra travel baru ke dalam sistem platform.</p>
         </div>
 
         @if($errors->any())
@@ -65,7 +65,7 @@
                             Nama Pemilik / Penanggung Jawab <span class="text-rose-500">*</span>
                         </label>
                         <input type="text" name="owner_name" id="owner_name" value="{{ old('owner_name') }}" required
-                               placeholder="Nama lengkap sesuai KTP"
+                               placeholder="Nama lengkap penanggung jawab"
                                class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
@@ -114,44 +114,7 @@
                 </div>
             </div>
 
-            <!-- Card 2: Dokumen Legalitas (KTP & SIUP) -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-base font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    Dokumen Legalitas & Verifikasi
-                </h2>
-                <p class="text-xs text-slate-500 mb-5">Unggah dokumen resmi untuk validasi izin operasional mitra travel. Dokumen disimpan dengan aman di penyimpanan server.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Dokumen KTP -->
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
-                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Dokumen KTP Pemilik</h3>
-                        </div>
-                        <p class="text-xs text-slate-500 mb-3">Foto/scan KTP asli penanggung jawab atau pemilik operator travel.</p>
-                        <input type="file" name="document_ktp" id="document_ktp" accept=".jpg,.jpeg,.png,.pdf"
-                               class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700">
-                        <p class="text-[11px] text-slate-400 mt-2">Format yang didukung: JPG, PNG, PDF (Maks. 5MB).</p>
-                    </div>
-
-                    <!-- Dokumen SIUP / NIB -->
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">2</span>
-                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Dokumen SIUP / NIB / Izin Trayek</h3>
-                        </div>
-                        <p class="text-xs text-slate-500 mb-3">Surat Izin Usaha Perdagangan atau Nomor Induk Berusaha travel.</p>
-                        <input type="file" name="document_siup" id="document_siup" accept=".jpg,.jpeg,.png,.pdf"
-                               class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
-                        <p class="text-[11px] text-slate-400 mt-2">Format yang didukung: JPG, PNG, PDF (Maks. 5MB).</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Status Verifikasi Awal -->
+            <!-- Card 2: Status Verifikasi Awal -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6" x-data="{ currentStatus: '{{ old('verification_status', 'pending') }}' }">
                 <h2 class="text-base font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +129,7 @@
                         <input type="radio" name="verification_status" value="pending" x-model="currentStatus" class="mt-0.5 text-amber-500 focus:ring-amber-400">
                         <div>
                             <p class="text-xs font-bold text-amber-800">Menunggu (Pending)</p>
-                            <p class="text-[11px] text-amber-600 mt-0.5">Dokumen perlu ditinjau sebelum aktivasi rute & booking.</p>
+                            <p class="text-[11px] text-amber-600 mt-0.5">Akun perlu ditinjau sebelum aktivasi rute & booking.</p>
                         </div>
                     </label>
 
@@ -184,7 +147,7 @@
                         <input type="radio" name="verification_status" value="rejected" x-model="currentStatus" class="mt-0.5 text-rose-600 focus:ring-rose-500">
                         <div>
                             <p class="text-xs font-bold text-rose-800">Ditolak (Rejected)</p>
-                            <p class="text-[11px] text-rose-600 mt-0.5">Dokumen tidak sesuai / tidak memenuhi syarat.</p>
+                            <p class="text-[11px] text-rose-600 mt-0.5">Tidak memenuhi syarat operasional platform.</p>
                         </div>
                     </label>
                 </div>
@@ -195,7 +158,7 @@
                         Alasan Penolakan <span class="text-rose-500">*</span>
                     </label>
                     <textarea name="rejection_reason" id="rejection_reason" rows="2"
-                              placeholder="Tuliskan catatan mengapa pendaftaran operator ini ditolak (misal: Dokumen SIUP sudah kadaluarsa)..."
+                              placeholder="Tuliskan catatan mengapa pendaftaran operator ini ditolak..."
                               class="w-full px-3.5 py-2 text-sm border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">{{ old('rejection_reason') }}</textarea>
                 </div>
             </div>

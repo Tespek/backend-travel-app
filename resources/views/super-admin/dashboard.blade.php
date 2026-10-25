@@ -14,7 +14,7 @@
                     Portal Tata Kelola & Analitik Platform
                 </h1>
                 <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
-                    Pantau kinerja seluruh mitra travel, arus pendapatan komisi sistem, verifikasi berkas legalitas pendaftaran, serta kepatuhan armada dan operasional antar kota.
+                    Pantau kinerja seluruh mitra travel, arus pendapatan komisi sistem, persetujuan pendaftaran mitra, serta kepatuhan armada dan operasional antar kota.
                 </p>
 
                 <!-- Quick Action Buttons -->
@@ -143,8 +143,8 @@
                         <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
                             {{ $stats['paid_bookings'] ?? 0 }} Tiket Lunas
                         </span>
-                        <a href="{{ route('super-admin.bookings.index') }}" class="text-[11px] font-semibold text-emerald-600 hover:underline">
-                            Rincian →
+                        <a href="{{ route('super-admin.reports.index') }}" class="text-[11px] font-semibold text-emerald-600 hover:underline">
+                            Laporan Fee →
                         </a>
                     </div>
                 </div>
@@ -184,7 +184,7 @@
                 <div>
                     <div class="pb-4 border-b border-slate-100">
                         <h2 class="text-base font-heading font-bold text-slate-900">Status Verifikasi Operator</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Proporsi legalitas mitra travel terdaftar dalam sistem.</p>
+                        <p class="text-xs text-slate-500 mt-0.5">Proporsi status mitra travel terdaftar dalam sistem.</p>
                     </div>
                     <div class="mt-4 relative h-48 sm:h-52 flex items-center justify-center">
                         <canvas id="operatorStatusChart"></canvas>
@@ -221,9 +221,9 @@
                     </div>
                     <div>
                         <h2 class="text-sm font-heading font-bold text-amber-950">
-                            Antrean Verifikasi Legalitas Operator ({{ count($pendingOperators ?? []) }})
+                            Antrean Persetujuan Operator ({{ count($pendingOperators ?? []) }})
                         </h2>
-                        <p class="text-xs text-amber-800">Operator yang menunggu review berkas SIUP, KTP pemilik, dan persetujuan akun.</p>
+                        <p class="text-xs text-amber-800">Operator yang menunggu peninjauan kesiapan dan persetujuan akun.</p>
                     </div>
                 </div>
                 <a href="{{ route('super-admin.operators.index', ['status' => 'pending']) }}" class="text-xs font-bold text-amber-900 hover:text-amber-950 hover:underline inline-flex items-center gap-1">
@@ -239,7 +239,7 @@
                             <th class="py-3 px-5">Nama Travel</th>
                             <th class="py-3 px-5">Pemilik & Kontak</th>
                             <th class="py-3 px-5">Tanggal Daftar</th>
-                            <th class="py-3 px-5">Kelengkapan Dokumen</th>
+                            <th class="py-3 px-5">Status Verifikasi</th>
                             <th class="py-3 px-5 text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -266,37 +266,16 @@
                                 <p class="text-[10px] text-slate-400 mt-0.5">{{ $op->created_at ? $op->created_at->diffForHumans() : '' }}</p>
                             </td>
                             <td class="py-4 px-5">
-                                <div class="flex items-center gap-2">
-                                    <!-- Badge KTP -->
-                                    @if($op->owner_id_card)
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                            <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                            KTP Terunggah
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-500">
-                                            KTP Kosong
-                                        </span>
-                                    @endif
-
-                                    <!-- Badge SIUP -->
-                                    @if($op->business_license)
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                            <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                            SIUP Terunggah
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-500">
-                                            SIUP Kosong
-                                        </span>
-                                    @endif
-                                </div>
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+                                    Menunggu Review
+                                </span>
                             </td>
                             <td class="py-4 px-5 text-right">
                                 <a href="{{ route('super-admin.operators.show', $op) }}" 
                                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-xs transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                    Review Berkas
+                                    Review Operator
                                 </a>
                             </td>
                         </tr>

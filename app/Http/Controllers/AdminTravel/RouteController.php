@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\AdminTravel;
 
 use App\Http\Controllers\Controller;
-use App\Models\City;
 use App\Models\Route;
 use Illuminate\Http\Request;
 
@@ -26,24 +25,25 @@ class RouteController extends Controller
 
     public function create()
     {
-        $cities = City::orderBy('name')->get();
-        return view('admin-travel.routes.create', compact('cities'));
+        return view('admin-travel.routes.create');
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'origin_city_id'      => 'required|exists:cities,id',
-            'destination_city_id' => 'required|exists:cities,id|different:origin_city_id',
-            'price'               => 'required|numeric|min:0',
-            'estimated_duration'  => 'nullable|string|max:50',
-            'is_active'           => 'boolean',
+            'origin' => 'required|string|max:100',
+            'destination' => 'required|string|max:100|different:origin',
+            'price' => 'required|numeric|min:0',
+            'estimated_duration' => 'nullable|string|max:50',
+            'is_active' => 'boolean',
         ], [
-            'destination_city_id.different' => 'Kota tujuan tidak boleh sama dengan kota asal.',
+            'origin.required' => 'Kota asal wajib diisi.',
+            'destination.required' => 'Kota tujuan wajib diisi.',
+            'destination.different' => 'Kota tujuan tidak boleh sama dengan kota asal.',
         ]);
 
         $validated['operator_id'] = $this->operatorId();
-        $validated['is_active']   = $request->boolean('is_active', true);
+        $validated['is_active'] = $request->boolean('is_active', true);
 
         Route::create($validated);
 
@@ -55,8 +55,7 @@ class RouteController extends Controller
     {
         $this->authorizeRoute($route);
 
-        $cities = City::orderBy('name')->get();
-        return view('admin-travel.routes.edit', compact('route', 'cities'));
+        return view('admin-travel.routes.edit', compact('route'));
     }
 
     public function update(Request $request, Route $route)
@@ -64,13 +63,15 @@ class RouteController extends Controller
         $this->authorizeRoute($route);
 
         $validated = $request->validate([
-            'origin_city_id'      => 'required|exists:cities,id',
-            'destination_city_id' => 'required|exists:cities,id|different:origin_city_id',
-            'price'               => 'required|numeric|min:0',
-            'estimated_duration'  => 'nullable|string|max:50',
-            'is_active'           => 'boolean',
+            'origin' => 'required|string|max:100',
+            'destination' => 'required|string|max:100|different:origin',
+            'price' => 'required|numeric|min:0',
+            'estimated_duration' => 'nullable|string|max:50',
+            'is_active' => 'boolean',
         ], [
-            'destination_city_id.different' => 'Kota tujuan tidak boleh sama dengan kota asal.',
+            'origin.required' => 'Kota asal wajib diisi.',
+            'destination.required' => 'Kota tujuan wajib diisi.',
+            'destination.different' => 'Kota tujuan tidak boleh sama dengan kota asal.',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', false);

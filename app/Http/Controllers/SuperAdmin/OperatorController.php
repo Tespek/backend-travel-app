@@ -27,17 +27,17 @@ class OperatorController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('owner_name', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('owner_name', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
         $operators = $query->latest()->paginate(10)->withQueryString();
 
         $counts = [
-            'all'      => Operator::count(),
-            'pending'  => Operator::where('verification_status', 'pending')->count(),
+            'all' => Operator::count(),
+            'pending' => Operator::where('verification_status', 'pending')->count(),
             'verified' => Operator::where('verification_status', 'verified')->count(),
             'rejected' => Operator::where('verification_status', 'rejected')->count(),
         ];
@@ -54,30 +54,30 @@ class OperatorController extends Controller
     }
 
     /**
-     * Simpan operator baru beserta dokumen KTP & SIUP.
+     * Simpan operator baru.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'                => 'required|string|max:255',
-            'email'               => 'required|email|unique:operators,email',
-            'owner_name'          => 'required|string|max:255',
-            'phone'               => 'nullable|string|max:20',
-            'address'             => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:operators,email',
+            'owner_name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
             'verification_status' => 'required|in:pending,verified,rejected',
-            'rejection_reason'    => 'nullable|required_if:verification_status,rejected|string',
-            'logo'                => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'document_ktp'        => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
-            'document_siup'       => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'rejection_reason' => 'nullable|required_if:verification_status,rejected|string',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'document_ktp' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'document_siup' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ], [
-            'name.required'                => 'Nama operator travel wajib diisi.',
-            'email.required'               => 'Email operator wajib diisi.',
-            'email.unique'                 => 'Email operator sudah terdaftar.',
-            'owner_name.required'          => 'Nama pemilik wajib diisi.',
+            'name.required' => 'Nama operator travel wajib diisi.',
+            'email.required' => 'Email operator wajib diisi.',
+            'email.unique' => 'Email operator sudah terdaftar.',
+            'owner_name.required' => 'Nama pemilik wajib diisi.',
             'rejection_reason.required_if' => 'Alasan penolakan wajib diisi jika status Ditolak.',
-            'logo.max'                     => 'Ukuran logo maksimal 2MB.',
-            'document_ktp.max'             => 'Ukuran dokumen KTP maksimal 5MB.',
-            'document_siup.max'            => 'Ukuran dokumen SIUP maksimal 5MB.',
+            'logo.max' => 'Ukuran logo maksimal 2MB.',
+            'document_ktp.max' => 'Ukuran dokumen KTP maksimal 5MB.',
+            'document_siup.max' => 'Ukuran dokumen SIUP maksimal 5MB.',
         ]);
 
         // Upload Logo
@@ -102,7 +102,7 @@ class OperatorController extends Controller
     }
 
     /**
-     * Tampilkan detail operator beserta dokumen & aksi verifikasi.
+     * Tampilkan detail profil operator & aksi verifikasi/persetujuan.
      */
     public function show(Operator $operator)
     {
@@ -122,29 +122,29 @@ class OperatorController extends Controller
     }
 
     /**
-     * Update data dan dokumen operator.
+     * Update data profil operator.
      */
     public function update(Request $request, Operator $operator)
     {
         $validated = $request->validate([
-            'name'                => 'required|string|max:255',
-            'email'               => ['required', 'email', Rule::unique('operators')->ignore($operator->id)],
-            'owner_name'          => 'required|string|max:255',
-            'phone'               => 'nullable|string|max:20',
-            'address'             => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', Rule::unique('operators')->ignore($operator->id)],
+            'owner_name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
             'verification_status' => 'required|in:pending,verified,rejected',
-            'rejection_reason'    => 'nullable|required_if:verification_status,rejected|string',
-            'logo'                => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'document_ktp'        => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
-            'document_siup'       => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'rejection_reason' => 'nullable|required_if:verification_status,rejected|string',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'document_ktp' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'document_siup' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ], [
-            'name.required'                => 'Nama operator travel wajib diisi.',
-            'email.required'               => 'Email operator wajib diisi.',
-            'owner_name.required'          => 'Nama pemilik wajib diisi.',
+            'name.required' => 'Nama operator travel wajib diisi.',
+            'email.required' => 'Email operator wajib diisi.',
+            'owner_name.required' => 'Nama pemilik wajib diisi.',
             'rejection_reason.required_if' => 'Alasan penolakan wajib diisi jika status Ditolak.',
-            'logo.max'                     => 'Ukuran logo maksimal 2MB.',
-            'document_ktp.max'             => 'Ukuran dokumen KTP maksimal 5MB.',
-            'document_siup.max'            => 'Ukuran dokumen SIUP maksimal 5MB.',
+            'logo.max' => 'Ukuran logo maksimal 2MB.',
+            'document_ktp.max' => 'Ukuran dokumen KTP maksimal 5MB.',
+            'document_siup.max' => 'Ukuran dokumen SIUP maksimal 5MB.',
         ]);
 
         // Handle Logo replacement
@@ -189,20 +189,20 @@ class OperatorController extends Controller
     {
         $validated = $request->validate([
             'verification_status' => 'required|in:verified,rejected,pending',
-            'rejection_reason'    => 'nullable|required_if:verification_status,rejected|string|max:1000',
+            'rejection_reason' => 'nullable|required_if:verification_status,rejected|string|max:1000',
         ]);
 
         $updateData = [
             'verification_status' => $validated['verification_status'],
-            'rejection_reason'    => $validated['verification_status'] === 'rejected' ? $validated['rejection_reason'] : null,
+            'rejection_reason' => $validated['verification_status'] === 'rejected' ? $validated['rejection_reason'] : null,
         ];
 
         $operator->update($updateData);
 
-        $statusText = match($validated['verification_status']) {
+        $statusText = match ($validated['verification_status']) {
             'verified' => 'diterima dan diverifikasi',
             'rejected' => 'ditolak',
-            default    => 'diubah statusnya menjadi pending',
+            default => 'diubah statusnya menjadi pending',
         };
 
         return back()->with('success', "Operator travel '{$operator->name}' berhasil {$statusText}.");

@@ -12,7 +12,7 @@
                 <span class="text-slate-800 font-medium">Edit</span>
             </nav>
             <h1 class="text-2xl font-bold text-slate-800">Edit Operator Travel</h1>
-            <p class="text-sm text-slate-500 mt-1">Perbarui profil, data penanggung jawab, atau perbarui dokumen legalitas operator.</p>
+            <p class="text-sm text-slate-500 mt-1">Perbarui profil dan data penanggung jawab operator travel.</p>
         </div>
 
         @if($errors->any())
@@ -112,66 +112,7 @@
                 </div>
             </div>
 
-            <!-- Card 2: Dokumen Legalitas (KTP & SIUP) -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-base font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    Dokumen Legalitas & Verifikasi
-                </h2>
-                <p class="text-xs text-slate-500 mb-5">Unggah ulang berkas baru jika dokumen sebelumnya tidak terbaca, buram, atau kadaluarsa.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Dokumen KTP -->
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
-                        <div class="flex items-center justify-between mb-2">
-                            <div class="flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
-                                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Dokumen KTP</h3>
-                            </div>
-                            @if($operator->document_ktp)
-                                <a href="{{ Storage::url($operator->document_ktp) }}" target="_blank"
-                                   class="text-[11px] font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                    Lihat File KTP
-                                </a>
-                            @else
-                                <span class="text-[11px] text-amber-600 font-medium">Belum diunggah</span>
-                            @endif
-                        </div>
-                        <p class="text-xs text-slate-500 mb-3">Pilih file baru untuk mengganti dokumen KTP yang ada saat ini.</p>
-                        <input type="file" name="document_ktp" id="document_ktp" accept=".jpg,.jpeg,.png,.pdf"
-                               class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700">
-                        <p class="text-[11px] text-slate-400 mt-2">Maks. 5MB (JPG, PNG, PDF).</p>
-                    </div>
-
-                    <!-- Dokumen SIUP -->
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
-                        <div class="flex items-center justify-between mb-2">
-                            <div class="flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">2</span>
-                                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Dokumen SIUP / NIB</h3>
-                            </div>
-                            @if($operator->document_siup)
-                                <a href="{{ Storage::url($operator->document_siup) }}" target="_blank"
-                                   class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                    Lihat File SIUP
-                                </a>
-                            @else
-                                <span class="text-[11px] text-amber-600 font-medium">Belum diunggah</span>
-                            @endif
-                        </div>
-                        <p class="text-xs text-slate-500 mb-3">Pilih file baru untuk mengganti dokumen SIUP yang ada saat ini.</p>
-                        <input type="file" name="document_siup" id="document_siup" accept=".jpg,.jpeg,.png,.pdf"
-                               class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
-                        <p class="text-[11px] text-slate-400 mt-2">Maks. 5MB (JPG, PNG, PDF).</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Status Verifikasi -->
+            <!-- Card 2: Status Verifikasi -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6" x-data="{ currentStatus: '{{ old('verification_status', $operator->verification_status) }}' }">
                 <h2 class="text-base font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -186,7 +127,7 @@
                         <input type="radio" name="verification_status" value="pending" x-model="currentStatus" class="mt-0.5 text-amber-500 focus:ring-amber-400">
                         <div>
                             <p class="text-xs font-bold text-amber-800">Menunggu (Pending)</p>
-                            <p class="text-[11px] text-amber-600 mt-0.5">Sedang dalam proses review dokumen.</p>
+                            <p class="text-[11px] text-amber-600 mt-0.5">Sedang dalam proses peninjauan akun.</p>
                         </div>
                     </label>
 
@@ -204,7 +145,7 @@
                         <input type="radio" name="verification_status" value="rejected" x-model="currentStatus" class="mt-0.5 text-rose-600 focus:ring-rose-500">
                         <div>
                             <p class="text-xs font-bold text-rose-800">Ditolak (Rejected)</p>
-                            <p class="text-[11px] text-rose-600 mt-0.5">Dokumen tidak valid atau tidak lengkap.</p>
+                            <p class="text-[11px] text-rose-600 mt-0.5">Akun ditolak atau tidak memenuhi syarat operasional.</p>
                         </div>
                     </label>
                 </div>

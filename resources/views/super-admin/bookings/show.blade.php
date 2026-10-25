@@ -49,7 +49,7 @@
                 <div class="flex justify-between py-1 border-b border-slate-100 text-xs">
                     <span class="text-slate-500">Rute:</span>
                     <span class="font-semibold text-slate-800">
-                        {{ $booking->schedule->route->originCity->name ?? '-' }} → {{ $booking->schedule->route->destinationCity->name ?? '-' }}
+                        {{ $booking->schedule->route->origin_name ?? '-' }} → {{ $booking->schedule->route->destination_name ?? '-' }}
                     </span>
                 </div>
                 <div class="flex justify-between py-1 border-b border-slate-100 text-xs">

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">Verifikasi Operator: {{ $operator->name }}</x-slot>
 
-    <div class="space-y-6" x-data="{ rejectModal: false, previewModal: false, activeDocTitle: '', activeDocUrl: '' }">
+    <div class="space-y-6" x-data="{ rejectModal: false }">
 
         <!-- Top Breadcrumbs & Back Bar -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -19,7 +19,7 @@
                         </span>
                     @elseif($operator->verification_status === 'pending')
                         <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-3 py-1 rounded-full">
-                            <span class="w-2 h-2 bg-amber-500 rounded-full animate-ping"></span> Menunggu Verifikasi Dokumen
+                            <span class="w-2 h-2 bg-amber-500 rounded-full animate-ping"></span> Menunggu Persetujuan
                         </span>
                     @else
                         <span class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold px-3 py-1 rounded-full">
@@ -55,11 +55,11 @@
         </div>
         @endif
 
-        <!-- ==================== 2-COLUMN LAYOUT: INFO KIRI & DOKUMEN KANAN ==================== -->
+        <!-- ==================== 2-COLUMN LAYOUT: INFO KIRI & STATISTIK KANAN ==================== -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-            <!-- ==================== KOLOM KIRI (INFO PERUSAHAAN & PEMILIK) ==================== -->
-            <div class="lg:col-span-5 space-y-6">
+            <!-- ==================== KOLOM KIRI (PROFIL & INFORMASI LENGKAP) ==================== -->
+            <div class="lg:col-span-7 space-y-6">
                 
                 <!-- Card Profil Perusahaan -->
                 <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 p-6 space-y-5">
@@ -79,38 +79,43 @@
                         </div>
                     </div>
 
-                    <!-- Detail Info List -->
-                    <div class="space-y-3.5 text-xs">
-                        <div>
+                    <!-- Detail Info Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-100">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pemilik / Penanggung Jawab</span>
-                            <p class="text-sm font-bold text-slate-800 mt-0.5 flex items-center gap-2">
-                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                {{ $operator->owner_name ?? '-' }}
+                            <p class="text-sm font-bold text-slate-800 mt-1 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                <span>{{ $operator->owner_name ?? '-' }}</span>
                             </p>
                         </div>
 
-                        <div>
+                        <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-100">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Kontak Telepon / WhatsApp</span>
-                            <p class="text-sm font-semibold text-slate-800 mt-0.5 flex items-center gap-2">
-                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                {{ $operator->phone ?? '-' }}
+                            <p class="text-sm font-semibold text-slate-800 mt-1 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                <span>{{ $operator->phone ?? '-' }}</span>
                             </p>
                         </div>
 
-                        <div>
+                        <div class="sm:col-span-2 p-3.5 rounded-xl bg-slate-50/70 border border-slate-100">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Alamat Kantor Pusat Travel</span>
-                            <p class="text-xs text-slate-700 mt-0.5 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                {{ $operator->address ?? 'Alamat belum dilengkapi.' }}
+                            <p class="text-xs text-slate-700 mt-1 leading-relaxed">
+                                {{ $operator->address ?? 'Alamat operasional belum dilengkapi.' }}
                             </p>
                         </div>
 
-                        <div class="pt-2 flex items-center justify-between text-slate-400 border-t border-slate-100">
+                        <div class="sm:col-span-2 pt-2 flex items-center justify-between text-slate-400 border-t border-slate-100 text-xs">
                             <span>Tanggal Registrasi:</span>
-                            <span class="font-bold text-slate-700">{{ $operator->created_at->isoFormat('D MMMM Y') }}</span>
+                            <span class="font-bold text-slate-700">{{ $operator->created_at->isoFormat('D MMMM Y') }} ({{ $operator->created_at->diffForHumans() }})</span>
                         </div>
                     </div>
                 </div>
 
+            </div>
+
+            <!-- ==================== KOLOM KANAN (KAPASITAS & RINGKASAN AKUN) ==================== -->
+            <div class="lg:col-span-5 space-y-6">
+                
                 <!-- Statistik Ringkas Operasional -->
                 <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 p-5">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Kapasitas Mitra Travel</h3>
@@ -134,134 +139,41 @@
                     </div>
                 </div>
 
-            </div>
-
-            <!-- ==================== KOLOM KANAN (PREVIEW DOKUMEN KTP & SIUP) ==================== -->
-            <div class="lg:col-span-7 space-y-6">
-                
-                <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 p-6 space-y-6">
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                        <div>
-                            <h2 class="text-base font-heading font-bold text-slate-900 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                Berkas Dokumen Legalitas
-                            </h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Periksa keabsahan scan KTP pemilik dan izin usaha SIUP / NIB operator.</p>
+                <!-- Info Cepat Status Operasional -->
+                <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 p-5">
+                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Kesiapan Operasional</h3>
+                    <div class="space-y-2.5 text-xs text-slate-600">
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                            <span>Admin Mitra Travel</span>
+                            <span class="font-bold text-slate-800">{{ $adminUsers->count() }} Terdaftar</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                            <span>Driver Travel</span>
+                            <span class="font-bold text-slate-800">{{ $drivers->count() }} Driver</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                            <span>Status Hak Akses</span>
+                            <span class="font-bold {{ $operator->verification_status === 'verified' ? 'text-emerald-700' : 'text-amber-700' }}">
+                                {{ $operator->verification_status === 'verified' ? 'Rute & Tiket Aktif' : 'Menunggu Approval' }}
+                            </span>
                         </div>
                     </div>
-
-                    <!-- 1. DOKUMEN KTP PEMILIK -->
-                    <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/60">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">1</span>
-                                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">KTP Pemilik ({{ $operator->owner_name ?? 'Mitra' }})</h3>
-                            </div>
-                            @if($operator->document_ktp)
-                                <a href="{{ Storage::url($operator->document_ktp) }}" target="_blank"
-                                   class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-slate-200 text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:bg-slate-50 shadow-2xs transition-colors">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                    Buka Ukuran Asli
-                                </a>
-                            @endif
-                        </div>
-
-                        <!-- Preview Container -->
-                        <div class="min-h-[220px] bg-white rounded-xl border border-slate-200/90 overflow-hidden flex items-center justify-center p-3">
-                            @if($operator->document_ktp)
-                                @php
-                                    $ktpExt = pathinfo($operator->document_ktp, PATHINFO_EXTENSION);
-                                    $isKtpImage = in_array(strtolower($ktpExt), ['jpg', 'jpeg', 'png', 'webp']);
-                                @endphp
-
-                                @if($isKtpImage)
-                                    <img src="{{ Storage::url($operator->document_ktp) }}" 
-                                         alt="Scan KTP {{ $operator->owner_name }}"
-                                         class="max-h-64 max-w-full rounded-lg border border-slate-200 shadow-sm object-contain">
-                                @else
-                                    <div class="text-center p-6">
-                                        <svg class="w-14 h-14 text-rose-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                                        <p class="text-xs font-bold text-slate-800">Dokumen Format PDF</p>
-                                        <a href="{{ Storage::url($operator->document_ktp) }}" target="_blank"
-                                           class="mt-3 inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors">
-                                            Lihat / Unduh Dokumen PDF
-                                        </a>
-                                    </div>
-                                @endif
-                            @else
-                                <div class="text-center p-8 text-slate-400">
-                                    <svg class="w-12 h-12 text-slate-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    <p class="text-xs font-semibold text-slate-500">Berkas KTP Belum Diunggah</p>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Mitra travel belum menyertakan scan identitas pemilik.</p>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- 2. DOKUMEN SIUP / NIB -->
-                    <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/60">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-lg bg-violet-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">2</span>
-                                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Izin Usaha SIUP / NIB Travel</h3>
-                            </div>
-                            @if($operator->document_siup)
-                                <a href="{{ Storage::url($operator->document_siup) }}" target="_blank"
-                                   class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-slate-200 text-xs font-bold text-violet-600 hover:text-violet-800 hover:bg-slate-50 shadow-2xs transition-colors">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                    Buka Ukuran Asli
-                                </a>
-                            @endif
-                        </div>
-
-                        <!-- Preview Container -->
-                        <div class="min-h-[220px] bg-white rounded-xl border border-slate-200/90 overflow-hidden flex items-center justify-center p-3">
-                            @if($operator->document_siup)
-                                @php
-                                    $siupExt = pathinfo($operator->document_siup, PATHINFO_EXTENSION);
-                                    $isSiupImage = in_array(strtolower($siupExt), ['jpg', 'jpeg', 'png', 'webp']);
-                                @endphp
-
-                                @if($isSiupImage)
-                                    <img src="{{ Storage::url($operator->document_siup) }}" 
-                                         alt="Scan SIUP {{ $operator->name }}"
-                                         class="max-h-64 max-w-full rounded-lg border border-slate-200 shadow-sm object-contain">
-                                @else
-                                    <div class="text-center p-6">
-                                        <svg class="w-14 h-14 text-rose-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                                        <p class="text-xs font-bold text-slate-800">Dokumen Format PDF</p>
-                                        <a href="{{ Storage::url($operator->document_siup) }}" target="_blank"
-                                           class="mt-3 inline-flex items-center gap-1.5 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors">
-                                            Lihat / Unduh Dokumen PDF
-                                        </a>
-                                    </div>
-                                @endif
-                            @else
-                                <div class="text-center p-8 text-slate-400">
-                                    <svg class="w-12 h-12 text-slate-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    <p class="text-xs font-semibold text-slate-500">Berkas SIUP/NIB Belum Diunggah</p>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Mitra travel belum melampirkan izin legalitas usaha.</p>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
 
         </div>
 
-        <!-- ==================== ACTION CARD VERIFIKASI (SANGAT PENTING) ==================== -->
+        <!-- ==================== ACTION CARD VERIFIKASI ==================== -->
         <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 sm:p-7 text-white shadow-xl border border-indigo-900/40">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div class="max-w-xl">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30 mb-2">
-                        Keputusan Legalitas & Izin Buka Rute
+                        Persetujuan & Hak Operasional
                     </span>
-                    <h3 class="text-xl font-heading font-black text-white">Keputusan Verifikasi Operator</h3>
+                    <h3 class="text-xl font-heading font-black text-white">Keputusan Persetujuan Operator</h3>
                     <p class="text-xs text-slate-300 mt-1 leading-relaxed">
-                        Pastikan seluruh data penanggung jawab dan scan dokumen izin usaha telah valid. Menyetujui operator ini akan mengizinkan pembukaan jadwal tiket di aplikasi mobile pelanggan.
+                        Pastikan seluruh data profil penanggung jawab dan kesiapan operasional mitra travel telah sesuai. Menyetujui operator ini akan mengizinkan pembukaan jadwal tiket di aplikasi pelanggan.
                     </p>
                 </div>
 
@@ -269,7 +181,7 @@
                     <!-- Tombol Setujui & Verifikasi (Hijau Besar) -->
                     @if($operator->verification_status !== 'verified')
                     <form action="{{ route('super-admin.operators.status', $operator) }}" method="POST"
-                          onsubmit="return confirm('Apakah Anda yakin dokumen sah dan ingin menyetujui akun operator {{ $operator->name }}?')">
+                          onsubmit="return confirm('Apakah Anda yakin ingin menyetujui akun operator {{ $operator->name }}?')">
                         @csrf
                         <input type="hidden" name="verification_status" value="verified">
                         <button type="submit"
@@ -317,8 +229,8 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                     </div>
                     <div>
-                        <h3 class="font-heading font-black text-base text-slate-900">Tolak Berkas Pendaftaran Travel</h3>
-                        <p class="text-xs text-slate-500">Berikan catatan alasan yang jelas agar mitra travel dapat memperbaiki dokumennya.</p>
+                        <h3 class="font-heading font-black text-base text-slate-900">Tolak Pendaftaran Travel</h3>
+                        <p class="text-xs text-slate-500">Berikan catatan alasan yang jelas mengapa pendaftaran operator ini ditolak.</p>
                     </div>
                 </div>
 
@@ -330,7 +242,7 @@
                             Alasan Penolakan <span class="text-rose-500">*</span>
                         </label>
                         <textarea name="rejection_reason" rows="4" required
-                                  placeholder="Contoh: Dokumen KTP pemilik buram / scan SIUP tidak mencantumkan izin trayek angkutan orang antar kota..."
+                                  placeholder="Contoh: Informasi kontak tidak valid / belum memenuhi kriteria operasional travel..."
                                   class="w-full px-3.5 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-rose-500 focus:border-rose-500"></textarea>
                     </div>
                     <div class="flex items-center justify-end gap-2 pt-2">

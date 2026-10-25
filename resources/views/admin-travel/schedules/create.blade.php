@@ -38,7 +38,7 @@
                         <option value="">-- Pilih Rute --</option>
                         @foreach($routes as $route)
                             <option value="{{ $route->id }}" {{ old('route_id') == $route->id ? 'selected' : '' }}>
-                                {{ $route->originCity->name }} → {{ $route->destinationCity->name }}
+                                {{ $route->origin_name }} → {{ $route->destination_name }}
                                 (Rp {{ number_format($route->price, 0, ',', '.') }})
                             </option>
                         @endforeach

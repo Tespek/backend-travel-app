@@ -90,7 +90,7 @@
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Reservasi</p>
                         <h3 class="text-2xl font-heading font-black text-slate-800 mt-1">{{ $stats['total_bookings'] ?? 0 }}</h3>
-                        <a href="{{ route('super-admin.bookings.index') }}" class="text-[11px] font-semibold text-emerald-600 hover:underline mt-2 inline-flex items-center gap-1">
+                        <a href="{{ route('admin-travel.bookings.index') }}" class="text-[11px] font-semibold text-emerald-600 hover:underline mt-2 inline-flex items-center gap-1">
                             Lihat Transaksi
                             <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </a>
@@ -169,11 +169,11 @@
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-800 uppercase tracking-wider">Menunggu Verifikasi</span>
                     </div>
                     <p class="text-xs text-amber-800 mt-1 leading-relaxed">
-                        Dokumen legalitas operator travel Anda sedang diperiksa oleh Super Admin. Anda tetap dapat menginput armada mobil, rute, pool, dan jadwal perjalanan sembari menunggu proses persetujuan.
+                        Akun operator travel Anda sedang dalam proses peninjauan oleh Super Admin. Anda tetap dapat menginput armada mobil, rute, pool, dan jadwal perjalanan sembari menunggu proses persetujuan.
                     </p>
                 </div>
                 <a href="{{ route('admin-travel.operator-profile.show') }}" class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors flex-shrink-0">
-                    Cek Berkas SIUP
+                    Lihat Profil Travel
                 </a>
             </div>
             @elseif($operator->verification_status === 'rejected')
@@ -184,11 +184,11 @@
                     </svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="font-bold text-xs uppercase tracking-wider text-rose-800">Pendaftaran Butuh Perbaikan Dokumen</p>
-                    <p class="text-xs text-rose-700 mt-1 leading-relaxed">{{ $operator->rejection_reason ?? 'Mohon perbarui dan unggah ulang scan KTP/SIUP Anda untuk aktivasi akun operator.' }}</p>
+                    <p class="font-bold text-xs uppercase tracking-wider text-rose-800">Pendaftaran Akun Belum Disetujui</p>
+                    <p class="text-xs text-rose-700 mt-1 leading-relaxed">{{ $operator->rejection_reason ?? 'Mohon perbarui informasi profil travel Anda atau hubungi Super Admin untuk aktivasi akun operator.' }}</p>
                 </div>
                 <a href="{{ route('admin-travel.operator-profile.show') }}" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors flex-shrink-0">
-                    Unggah Ulang
+                    Perbarui Profil
                 </a>
             </div>
             @endif
@@ -412,9 +412,9 @@
                                 </td>
                                 <td class="py-3.5 px-4">
                                     <div class="flex items-center gap-1 font-semibold text-slate-800">
-                                        <span>{{ $bk->schedule->route->originCity->name ?? '-' }}</span>
+                                        <span>{{ $bk->schedule->route->origin_name ?? '-' }}</span>
                                         <span class="text-slate-400">→</span>
-                                        <span>{{ $bk->schedule->route->destinationCity->name ?? '-' }}</span>
+                                        <span>{{ $bk->schedule->route->destination_name ?? '-' }}</span>
                                     </div>
                                     <p class="text-[11px] text-slate-500 mt-0.5">
                                         Kursi: <span class="font-bold text-slate-700">{{ $bk->seat_number ?? '-' }}</span>
@@ -484,9 +484,9 @@
                         <div class="p-4 hover:bg-slate-50/80 transition-colors">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-1.5 font-bold text-slate-900">
-                                    <span>{{ $sch->route->originCity->name ?? '-' }}</span>
+                                    <span>{{ $sch->route->origin_name ?? '-' }}</span>
                                     <span class="text-slate-400">→</span>
-                                    <span>{{ $sch->route->destinationCity->name ?? '-' }}</span>
+                                    <span>{{ $sch->route->destination_name ?? '-' }}</span>
                                 </div>
                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $sch->status === 'open' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600' }}">
                                     {{ ucfirst($sch->status) }}

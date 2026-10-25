@@ -1,12 +1,12 @@
 <x-app-layout>
-    <x-slot name="header">Profil & Legalitas Travel</x-slot>
+    <x-slot name="header">Profil Operator Travel</x-slot>
 
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-slate-800">Profil & Dokumen Legalitas Travel</h1>
-                <p class="text-sm text-slate-500 mt-1">Kelola informasi publik travel dan unggah dokumen KTP/SIUP untuk proses verifikasi platform.</p>
+                <h1 class="text-2xl font-bold text-slate-800">Profil Operator Travel</h1>
+                <p class="text-sm text-slate-500 mt-1">Kelola informasi publik, kontak operasional, dan logo travel Anda.</p>
             </div>
             <div class="self-start sm:self-auto">
                 @if($operator->verification_status === 'verified')
@@ -15,11 +15,11 @@
                     </span>
                 @elseif($operator->verification_status === 'pending')
                     <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold px-3 py-1.5 rounded-full">
-                        <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span> Menunggu Peninjauan Admin
+                        <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span> Menunggu Persetujuan
                     </span>
                 @else
                     <span class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 text-xs font-semibold px-3 py-1.5 rounded-full">
-                        <span class="w-2 h-2 bg-rose-500 rounded-full"></span> Perlu Perbaikan Dokumen
+                        <span class="w-2 h-2 bg-rose-500 rounded-full"></span> Belum Disetujui
                     </span>
                 @endif
             </div>
@@ -34,10 +34,10 @@
             <div>
                 <p class="font-bold text-xs uppercase tracking-wider text-rose-700">Pendaftaran Travel Belum Disetujui</p>
                 <p class="text-xs text-rose-800 mt-1">
-                    <span class="font-semibold">Catatan dari Super Admin:</span> {{ $operator->rejection_reason ?? 'Dokumen tidak valid atau tidak terbaca.' }}
+                    <span class="font-semibold">Catatan dari Super Admin:</span> {{ $operator->rejection_reason ?? 'Data operasional tidak memenuhi syarat.' }}
                 </p>
                 <p class="text-xs text-rose-700 mt-2 font-medium">
-                    Silakan unggah kembali dokumen KTP atau SIUP yang baru dan jelas melalui formulir di bawah ini. Status akan otomatis diajukan kembali untuk peninjauan ulang.
+                    Silakan perbarui profil travel Anda atau hubungi Super Admin untuk peninjauan ulang status akun.
                 </p>
             </div>
         </div>
@@ -47,9 +47,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <div>
-                <p class="font-bold text-xs uppercase tracking-wider text-amber-800">Menunggu Verifikasi Legalitas</p>
+                <p class="font-bold text-xs uppercase tracking-wider text-amber-800">Menunggu Persetujuan Akun</p>
                 <p class="text-xs text-amber-700 mt-1">
-                    Dokumen legalitas operator travel Anda sedang dalam proses peninjauan oleh tim Super Admin platform. Anda tetap dapat melengkapi data armada, rute, dan driver sembari menunggu persetujuan.
+                    Pendaftaran operator travel Anda sedang dalam proses peninjauan oleh tim Super Admin platform. Anda tetap dapat melengkapi data armada, rute, dan driver sembari menunggu persetujuan.
                 </p>
             </div>
         </div>
@@ -139,73 +139,6 @@
                 </div>
             </div>
 
-            <!-- Upload / Update Dokumen KTP & SIUP -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-base font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    Unggah Dokumen Legalitas (KTP & SIUP)
-                </h2>
-                <p class="text-xs text-slate-500 mb-5">Dokumen ini digunakan oleh Super Admin untuk memeriksa keaslian izin operasi travel Anda.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Dokumen KTP -->
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
-                                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">KTP Pemilik Travel</h3>
-                                </div>
-                                @if($operator->document_ktp)
-                                    <a href="{{ Storage::url($operator->document_ktp) }}" target="_blank"
-                                       class="text-[11px] font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                        Lihat File
-                                    </a>
-                                @else
-                                    <span class="text-[11px] text-rose-600 font-semibold">Wajib Diunggah</span>
-                                @endif
-                            </div>
-                            <p class="text-xs text-slate-500 mb-3">Foto/scan KTP asli penanggung jawab sesuai nama pemilik.</p>
-                        </div>
-                        <div>
-                            <input type="file" name="document_ktp" id="document_ktp" accept=".jpg,.jpeg,.png,.pdf"
-                                   class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700">
-                            <p class="text-[11px] text-slate-400 mt-2">Maks. 5MB (JPG, PNG, PDF).</p>
-                        </div>
-                    </div>
-
-                    <!-- Dokumen SIUP -->
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">2</span>
-                                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">SIUP / NIB / Izin Usaha</h3>
-                                </div>
-                                @if($operator->document_siup)
-                                    <a href="{{ Storage::url($operator->document_siup) }}" target="_blank"
-                                       class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                        Lihat File
-                                    </a>
-                                @else
-                                    <span class="text-[11px] text-rose-600 font-semibold">Wajib Diunggah</span>
-                                @endif
-                            </div>
-                            <p class="text-xs text-slate-500 mb-3">Surat Izin Usaha Perdagangan atau Nomor Induk Berusaha (NIB) travel.</p>
-                        </div>
-                        <div>
-                            <input type="file" name="document_siup" id="document_siup" accept=".jpg,.jpeg,.png,.pdf"
-                                   class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
-                            <p class="text-[11px] text-slate-400 mt-2">Maks. 5MB (JPG, PNG, PDF).</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Submit Button -->
             <div class="flex items-center justify-end gap-3 pt-2">
                 <button type="submit"
@@ -213,7 +146,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
-                    Simpan & Ajukan Pembaruan Dokumen
+                    Simpan Perubahan Profil
                 </button>
             </div>
         </form>

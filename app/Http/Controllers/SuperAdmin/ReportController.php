@@ -32,7 +32,8 @@ class ReportController extends Controller
             $query->whereDate('created_at', '<=', $endDate);
         }
 
-        $totalGross = (clone $query)->sum('total_price');
+        $totalRevenue = (clone $query)->sum('total_price');
+        $totalGross = $totalRevenue;
         $totalTickets = (clone $query)->count();
         $totalPlatformFee = round($totalGross * 0.05); // 5% komisi platform
         $totalNetOperators = $totalGross - $totalPlatformFee;
@@ -57,22 +58,42 @@ class ReportController extends Controller
             $chartFees[] = round($grossMonth * 0.05);
         }
 
-        // Statistik per operator
-        $operatorReports = Operator::withCount([
-            'bookings as paid_bookings_count' => function ($q) {
+        // Statistik per operator (terfilter berdasarkan operator dan rentang tanggal jika ada)
+        $operatorQuery = Operator::query();
+
+        if ($operatorId) {
+            $operatorQuery->where('id', $operatorId);
+        }
+
+        $operatorReports = $operatorQuery->withCount([
+            'bookings as paid_bookings_count' => function ($q) use ($startDate, $endDate) {
                 $q->where('payment_status', 'paid');
+                if ($startDate) {
+                    $q->whereDate('created_at', '>=', $startDate);
+                }
+                if ($endDate) {
+                    $q->whereDate('created_at', '<=', $endDate);
+                }
             },
             'vehicles',
-            'routes'
+            'routes',
         ])
-        ->withSum(['bookings as total_revenue' => function ($q) {
-            $q->where('payment_status', 'paid');
-        }], 'total_price')
-        ->get();
+            ->withSum(['bookings as total_revenue' => function ($q) use ($startDate, $endDate) {
+                $q->where('payment_status', 'paid');
+                if ($startDate) {
+                    $q->whereDate('created_at', '>=', $startDate);
+                }
+                if ($endDate) {
+                    $q->whereDate('created_at', '<=', $endDate);
+                }
+            }], 'total_price')
+            ->orderBy('name')
+            ->get();
 
         $operators = Operator::orderBy('name')->get();
 
         return view('super-admin.reports.index', compact(
+            'totalRevenue',
             'totalGross',
             'totalTickets',
             'totalPlatformFee',

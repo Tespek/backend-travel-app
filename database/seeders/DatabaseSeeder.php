@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Operator;
 use App\Models\City;
+use App\Models\Operator;
 use App\Models\OperatorPickupPoint;
-use App\Models\Vehicle;
 use App\Models\Route;
 use App\Models\Schedule;
+use App\Models\User;
+use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -89,6 +89,8 @@ class DatabaseSeeder extends Seeder
         // Rute
         $route = Route::create([
             'operator_id' => $operator->id,
+            'origin' => 'Jakarta',
+            'destination' => 'Bandung',
             'origin_city_id' => $jakarta->id,
             'destination_city_id' => $bandung->id,
             'price' => 150000,
