@@ -29,6 +29,42 @@
                         heading: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
                     },
                     colors: {
+                        gov: {
+                            'primary': '#0F172A',
+                            'primary-hover': '#1E293B',
+                            'accent': '#1E40AF',
+                            'canvas': '#F8FAFC',
+                            'card': '#FFFFFF',
+                            'border': '#E2E8F0',
+                            'text': '#0F172A',
+                            'muted': '#64748B',
+                        },
+                        operator: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            'primary': '#0D9488',
+                            'primary-hover': '#0F766E',
+                            'accent': '#06B6D4',
+                            'canvas': '#F0FDFA',
+                            'card': '#FFFFFF',
+                            'border': '#CCFBF1',
+                            'text': '#134E4A',
+                            'muted': '#64748B',
+                        },
+                        'travel-status': {
+                            'available': '#10B981',
+                            'booked': '#0284C7',
+                            'delayed': '#F59E0B',
+                            'cancelled': '#EF4444',
+                        },
                         primary: {
                             50: '#eff6ff',
                             100: '#dbeafe',
@@ -81,6 +117,7 @@
                         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
                         'glow-indigo': '0 0 20px -2px rgba(79, 70, 229, 0.4)',
                         'glow-blue': '0 0 20px -2px rgba(37, 99, 235, 0.35)',
+                        'glow-teal': '0 0 20px -2px rgba(13, 148, 136, 0.4)',
                     }
                 }
             }
@@ -139,7 +176,7 @@
             color: #c7d2fe;
         }
 
-        /* Admin Travel Light/Blue Sidebar Active Item */
+        /* Admin Travel Fresh Teal/Emerald Sidebar Active Item */
         .at-nav-item {
             display: flex;
             align-items: center;
@@ -148,18 +185,18 @@
             border-radius: 0.75rem;
             font-size: 0.875rem;
             font-weight: 500;
-            color: #475569;
+            color: #334155;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
         .at-nav-item:hover {
-            color: #1e40af;
-            background-color: #f0f7ff;
+            color: #0f766e;
+            background-color: #f0fdfa;
         }
         .at-nav-item.active {
             color: #ffffff;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.35);
+            background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+            box-shadow: 0 4px 14px -2px rgba(13, 148, 136, 0.45);
             font-weight: 600;
         }
         .at-nav-item.active svg {
@@ -170,11 +207,11 @@
             transition: color 0.2s;
         }
         .at-nav-item:hover svg {
-            color: #2563eb;
+            color: #0d9488;
         }
     </style>
 </head>
-<body class="h-full bg-slate-50 text-slate-900 antialiased font-sans {{ $isSuperAdmin ? 'selection:bg-indigo-600' : 'selection:bg-primary-600' }} selection:text-white">
+<body class="h-full bg-slate-50 text-slate-900 antialiased font-sans {{ $isSuperAdmin ? 'selection:bg-indigo-600' : 'selection:bg-teal-600' }} selection:text-white">
 
 <div x-data="{ 
     mobileSidebarOpen: false,
@@ -225,18 +262,18 @@
                             </div>
                         </div>
                     @else
-                        <!-- Icon Admin Travel: Royal Blue Bus -->
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-blue-400 flex items-center justify-center text-white shadow-lg shadow-primary-600/30 group-hover:scale-105 transition-transform duration-200">
+                        <!-- Icon Admin Travel: Fresh Emerald / Teal Bus -->
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 via-teal-700 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-teal-600/30 group-hover:scale-105 transition-transform duration-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
                             </svg>
                         </div>
                         <div>
                             <div class="flex items-center gap-1.5">
-                                <span class="font-heading font-extrabold text-slate-900 text-base tracking-tight">SI-TRAVEL</span>
-                                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-50 text-primary-600 border border-primary-200">MITRA</span>
+                                <span class="font-heading font-extrabold text-teal-950 text-base tracking-tight">SI-TRAVEL</span>
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200">OPERATOR</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 font-medium">Multi-Operator System</p>
+                            <p class="text-[11px] text-teal-600/80 font-medium">Portal Operasional</p>
                         </div>
                     @endif
                 </a>
@@ -253,11 +290,11 @@
             <!-- Operator Travel Context Banner (Khusus Admin Travel) -->
             @if(!$isSuperAdmin && auth()->user()->operator)
             <div class="px-4 pt-3 pb-1 flex-shrink-0">
-                <div class="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2.5">
-                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                <div class="px-3 py-2 rounded-xl bg-teal-50/70 border border-teal-200/80 flex items-center gap-2.5">
+                    <div class="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse"></div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Mitra Travel</p>
-                        <p class="text-xs font-bold text-slate-800 truncate">{{ auth()->user()->operator->name }}</p>
+                        <p class="text-[10px] font-semibold text-teal-600 uppercase tracking-wider">Mitra Travel</p>
+                        <p class="text-xs font-bold text-teal-950 truncate">{{ auth()->user()->operator->name }}</p>
                     </div>
                 </div>
             </div>
@@ -431,12 +468,12 @@
                             {{ $isSuperAdmin ? 'bg-slate-900 border border-slate-800' : 'bg-slate-50 border border-slate-200/80' }}">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0
-                                    {{ $isSuperAdmin ? 'bg-gradient-to-tr from-indigo-600 to-violet-600' : 'bg-gradient-to-tr from-blue-600 to-indigo-600' }}">
+                                    {{ $isSuperAdmin ? 'bg-gradient-to-tr from-indigo-600 to-violet-600' : 'bg-gradient-to-tr from-teal-600 to-emerald-600' }}">
                             {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                         </div>
                         <div class="min-w-0 flex-1">
                             <p class="text-xs font-bold truncate {{ $isSuperAdmin ? 'text-white' : 'text-slate-900' }}">{{ auth()->user()->name }}</p>
-                            <p class="text-[10px] truncate {{ $isSuperAdmin ? 'text-indigo-300' : 'text-slate-500' }}">
+                            <p class="text-[10px] truncate {{ $isSuperAdmin ? 'text-indigo-300' : 'text-teal-700 font-semibold' }}">
                                 {{ $isSuperAdmin ? 'Super Administrator' : 'Admin Travel' }}
                             </p>
                         </div>
@@ -463,29 +500,30 @@
     <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
 
         <!-- ===== TOP NAVBAR ===== -->
-        <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 h-16 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-10 shadow-2xs">
+        <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 h-16 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20 shadow-2xs">
             
             <!-- Left: Mobile Trigger & Breadcrumbs -->
             <div class="flex items-center gap-3 sm:gap-4 min-w-0">
                 <button @click="mobileSidebarOpen = true" 
-                        class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-hidden">
+                        type="button"
+                        class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-hidden flex-shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
 
                 <!-- Breadcrumbs -->
-                <div class="flex items-center gap-2 text-sm">
-                    <span class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold {{ $isSuperAdmin ? 'text-indigo-600' : 'text-primary-600' }}">
+                <div class="flex items-center gap-2 text-sm min-w-0">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold flex-shrink-0 {{ $isSuperAdmin ? 'text-indigo-600' : 'text-teal-700' }}">
                         @if($isSuperAdmin)
                         <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         Platform Master
                         @else
-                        <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                        Travel Panel
+                        <svg class="w-3.5 h-3.5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                        Travel Dispatch
                         @endif
                     </span>
-                    <span class="hidden sm:inline text-slate-300">/</span>
+                    <span class="hidden sm:inline text-slate-300 flex-shrink-0">/</span>
                     <h1 class="text-base sm:text-lg font-heading font-bold text-slate-800 truncate">
                         {{ $header ?? 'Dashboard' }}
                     </h1>
@@ -493,19 +531,20 @@
             </div>
 
             <!-- Right: Date, Notifications, Profile Dropdown -->
-            <div class="flex items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                 
                 <!-- Date Pill -->
-                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200/80">
-                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200/80 flex-shrink-0 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                    <span>{{ now()->isoFormat('dddd, D MMMM Y') }}</span>
+                    <span class="whitespace-nowrap">{{ now()->isoFormat('dddd, D MMMM Y') }}</span>
                 </div>
 
                 <!-- Notifications Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" 
+                            type="button"
                             class="relative p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors focus:outline-hidden">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
@@ -518,7 +557,7 @@
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 ring-2 ring-white"></span>
                             </span>
                         @else
-                            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full {{ $isSuperAdmin ? 'bg-indigo-600' : 'bg-primary-600' }} ring-2 ring-white"></span>
+                            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full {{ $isSuperAdmin ? 'bg-indigo-600' : 'bg-teal-600' }} ring-2 ring-white"></span>
                         @endif
                     </button>
 
@@ -555,7 +594,7 @@
                             @endif
 
                             <div class="p-3.5 hover:bg-slate-50 transition-colors flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg {{ $isSuperAdmin ? 'bg-indigo-50 text-indigo-600' : 'bg-blue-50 text-blue-600' }} flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <div class="w-7 h-7 rounded-lg {{ $isSuperAdmin ? 'bg-indigo-50 text-indigo-600' : 'bg-teal-50 text-teal-600' }} flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
                                 <div class="min-w-0 flex-1">
@@ -569,23 +608,24 @@
                 </div>
 
                 <!-- Separator -->
-                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="h-6 w-px bg-slate-200 flex-shrink-0"></div>
 
                 <!-- Profile Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" 
+                            type="button"
                             class="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-hidden">
-                        <div class="w-8 h-8 rounded-xl text-white font-bold text-xs flex items-center justify-center shadow-xs
-                                    {{ $isSuperAdmin ? 'bg-gradient-to-tr from-indigo-600 to-violet-600' : 'bg-gradient-to-tr from-primary-600 to-blue-500' }}">
+                        <div class="w-8 h-8 rounded-xl text-white font-bold text-xs flex items-center justify-center shadow-xs flex-shrink-0
+                                    {{ $isSuperAdmin ? 'bg-gradient-to-tr from-indigo-600 to-violet-600' : 'bg-gradient-to-tr from-teal-600 to-emerald-600' }}">
                             {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                         </div>
                         <div class="hidden sm:block text-left">
                             <p class="text-xs font-bold text-slate-800 leading-tight truncate max-w-[120px]">{{ auth()->user()->name }}</p>
-                            <p class="text-[10px] font-medium capitalize {{ $isSuperAdmin ? 'text-indigo-600 font-semibold' : 'text-slate-500' }}">
+                            <p class="text-[10px] font-medium capitalize {{ $isSuperAdmin ? 'text-indigo-600 font-semibold' : 'text-teal-700 font-semibold' }}">
                                 {{ $isSuperAdmin ? 'Super Administrator' : 'Admin Travel' }}
                             </p>
                         </div>
-                        <svg class="w-4 h-4 text-slate-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-slate-400 hidden sm:block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>

@@ -9,7 +9,6 @@ use App\Models\Schedule;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Vehicle;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -30,16 +29,16 @@ class DashboardController extends Controller
             $totalOperatorNet = $totalGrossRevenue - $totalPlatformFee;
 
             $stats = [
-                'total_platform_fee'  => $totalPlatformFee,
+                'total_platform_fee' => $totalPlatformFee,
                 'total_gross_revenue' => $totalGrossRevenue,
-                'total_operator_net'  => $totalOperatorNet,
-                'total_operators'     => Operator::count(),
-                'verified_operators'  => Operator::where('verification_status', 'verified')->count(),
-                'pending_operators'   => Operator::where('verification_status', 'pending')->count(),
-                'rejected_operators'  => Operator::where('verification_status', 'rejected')->count(),
-                'total_users'         => User::count(),
-                'total_bookings'      => Booking::count(),
-                'paid_bookings'       => Booking::where('payment_status', 'paid')->count(),
+                'total_operator_net' => $totalOperatorNet,
+                'total_operators' => Operator::count(),
+                'verified_operators' => Operator::where('verification_status', 'verified')->count(),
+                'pending_operators' => Operator::where('verification_status', 'pending')->count(),
+                'rejected_operators' => Operator::where('verification_status', 'rejected')->count(),
+                'total_users' => User::count(),
+                'total_bookings' => Booking::count(),
+                'paid_bookings' => Booking::where('payment_status', 'paid')->count(),
             ];
 
             // 6 Bulan Terakhir untuk Dual Line Chart (Platform Fee vs Operator Net)
@@ -71,7 +70,7 @@ class DashboardController extends Controller
             // Status Verifikasi Operator untuk Pie / Doughnut Chart
             $operatorStatusData = [
                 'verified' => Operator::where('verification_status', 'verified')->count(),
-                'pending'  => Operator::where('verification_status', 'pending')->count(),
+                'pending' => Operator::where('verification_status', 'pending')->count(),
                 'rejected' => Operator::where('verification_status', 'rejected')->count(),
             ];
 
@@ -100,12 +99,16 @@ class DashboardController extends Controller
             $operator = Operator::find($operatorId);
 
             $stats = [
-                'total_vehicles'  => Vehicle::where('operator_id', $operatorId)->count(),
-                'total_routes'    => Route::where('operator_id', $operatorId)->where('is_active', true)->count(),
-                'total_drivers'   => User::where('role', 'driver')->where('operator_id', $operatorId)->count(),
-                'total_schedules' => Schedule::whereHas('route', fn($q) => $q->where('operator_id', $operatorId))->count(),
-                'total_bookings'  => Booking::where('operator_id', $operatorId)->count(),
-                'total_revenue'   => Booking::where('operator_id', $operatorId)->where('payment_status', 'paid')->sum('total_price'),
+                'total_vehicles' => Vehicle::where('operator_id', $operatorId)->count(),
+                'available_vehicles' => Vehicle::where('operator_id', $operatorId)->where('status', 'available')->count(),
+                'total_routes' => Route::where('operator_id', $operatorId)->where('is_active', true)->count(),
+                'total_drivers' => User::where('role', 'driver')->where('operator_id', $operatorId)->count(),
+                'total_schedules' => Schedule::whereHas('route', fn ($q) => $q->where('operator_id', $operatorId))->count(),
+                'today_schedules' => Schedule::whereHas('route', fn ($q) => $q->where('operator_id', $operatorId))->whereDate('departure_date', today())->count(),
+                'total_bookings' => Booking::where('operator_id', $operatorId)->count(),
+                'today_bookings' => Booking::where('operator_id', $operatorId)->whereDate('created_at', today())->count(),
+                'total_revenue' => Booking::where('operator_id', $operatorId)->where('payment_status', 'paid')->sum('total_price'),
+                'today_revenue' => Booking::where('operator_id', $operatorId)->where('payment_status', 'paid')->whereDate('created_at', today())->sum('total_price'),
             ];
 
             // 6 Bulan Terakhir untuk Line Chart
@@ -122,21 +125,21 @@ class DashboardController extends Controller
 
             // Status Pembayaran untuk Doughnut Chart
             $paymentStats = [
-                'paid'      => Booking::where('operator_id', $operatorId)->where('payment_status', 'paid')->count(),
-                'pending'   => Booking::where('operator_id', $operatorId)->where('payment_status', 'pending')->count(),
+                'paid' => Booking::where('operator_id', $operatorId)->where('payment_status', 'paid')->count(),
+                'pending' => Booking::where('operator_id', $operatorId)->where('payment_status', 'pending')->count(),
                 'cancelled' => Booking::where('operator_id', $operatorId)->whereIn('payment_status', ['cancelled', 'expired', 'failed'])->count(),
             ];
 
-            // 5 Pemesanan Terbaru
+            // 6 Pemesanan Terbaru dengan relasi lengkap
             $recentBookings = Booking::with(['schedule.route.originCity', 'schedule.route.destinationCity', 'driver'])
                 ->where('operator_id', $operatorId)
                 ->latest()
-                ->take(5)
+                ->take(6)
                 ->get();
 
-            // Jadwal Keberangkatan Terdekat
-            $upcomingSchedules = Schedule::with(['route.originCity', 'route.destinationCity', 'vehicle'])
-                ->whereHas('route', fn($q) => $q->where('operator_id', $operatorId))
+            // Jadwal Keberangkatan Terdekat dengan relasi bookings & vehicle
+            $upcomingSchedules = Schedule::with(['route.originCity', 'route.destinationCity', 'vehicle', 'bookings'])
+                ->whereHas('route', fn ($q) => $q->where('operator_id', $operatorId))
                 ->where('departure_date', '>=', now()->toDateString())
                 ->orderBy('departure_date')
                 ->orderBy('departure_time')

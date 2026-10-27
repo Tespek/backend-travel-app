@@ -14,7 +14,7 @@
 
         {{-- Export hint --}}
         <div class="flex items-center gap-2 text-xs text-slate-400">
-            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
@@ -39,7 +39,7 @@
                         <a href="{{ route('admin-travel.reports.index', array_merge(request()->query(), ['period' => $key])) }}"
                            class="px-4 py-1.5 rounded-md text-xs font-semibold transition-colors
                                   {{ $period === $key
-                                      ? 'bg-blue-600 text-white shadow-sm'
+                                      ? 'bg-emerald-600 text-white shadow-sm'
                                       : 'text-slate-600 hover:text-slate-900' }}">
                             {{ $label }}
                         </a>
@@ -55,7 +55,7 @@
                     </label>
                     <select name="month"
                             onchange="this.form.submit()"
-                            class="text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                         @foreach(range(1, 12) as $m)
                             <option value="{{ $m }}" {{ $month == $m ? 'selected' : '' }}>
                                 {{ \Carbon\Carbon::create(null, $m)->isoFormat('MMMM') }}
@@ -73,7 +73,7 @@
                     </label>
                     <select name="year"
                             onchange="this.form.submit()"
-                            class="text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                         @foreach(array_reverse($availableYears) as $y)
                             <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endforeach
@@ -142,8 +142,8 @@
         {{-- Jumlah Tiket Terjual --}}
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
             <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
                     </svg>
@@ -174,7 +174,7 @@
         </div>
 
         {{-- All-Time Revenue --}}
-        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl shadow-sm p-5 text-white">
+        <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl shadow-sm p-5 text-white">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-lg bg-white/15 flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,11 +183,11 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-xs font-medium text-blue-200 uppercase tracking-wider">Total Pendapatan (Semua Waktu)</p>
+            <p class="text-xs font-medium text-emerald-100 uppercase tracking-wider">Total Pendapatan (Semua Waktu)</p>
             <p class="text-2xl font-bold mt-0.5">
                 Rp {{ number_format($totalRevenueAllTime, 0, ',', '.') }}
             </p>
-            <p class="text-xs text-blue-200 mt-1">
+            <p class="text-xs text-emerald-100 mt-1">
                 {{ number_format($totalTicketsAllTime, 0, ',', '.') }} tiket terjual secara kumulatif
             </p>
         </div>
@@ -212,7 +212,7 @@
                 </div>
                 <div class="flex items-center gap-3 text-xs text-slate-500">
                     <span class="flex items-center gap-1">
-                        <span class="inline-block w-3 h-3 rounded-sm bg-blue-500"></span> Pendapatan
+                        <span class="inline-block w-3 h-3 rounded-sm bg-emerald-500"></span> Pendapatan
                     </span>
                     <span class="flex items-center gap-1">
                         <span class="inline-block w-3 h-3 rounded-sm bg-emerald-400"></span> Tiket
@@ -244,7 +244,7 @@
                                 . ' → '
                                 . optional(optional(optional($item['route']->schedule)->route)->destinationCity)->name;
                             $pct = $periodRevenue > 0 ? round(($item['revenue'] / $periodRevenue) * 100) : 0;
-                            $colors = ['bg-blue-500','bg-indigo-500','bg-violet-500','bg-purple-500','bg-pink-500'];
+                            $colors = ['bg-emerald-500','bg-teal-500','bg-green-500','bg-emerald-600','bg-teal-600'];
                             $color = $colors[$idx] ?? 'bg-slate-400';
                         @endphp
                         <div>
@@ -323,7 +323,7 @@
                         <tr class="hover:bg-slate-50/60 transition-colors">
                             <td class="px-5 py-3.5">
                                 <a href="{{ route('admin-travel.bookings.show', $booking) }}"
-                                   class="font-mono text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline">
+                                   class="font-mono text-xs font-semibold text-emerald-600 hover:text-emerald-800 hover:underline">
                                     {{ $booking->booking_code }}
                                 </a>
                             </td>
@@ -419,8 +419,8 @@
 
         // Gradient fill for revenue bars
         const gradient = ctx.createLinearGradient(0, 0, 0, 280);
-        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.85)');
-        gradient.addColorStop(1, 'rgba(99, 102, 241, 0.45)');
+        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.85)');
+        gradient.addColorStop(1, 'rgba(5, 150, 105, 0.35)');
 
         new Chart(ctx, {
             type: 'bar',
@@ -431,7 +431,7 @@
                         label: 'Pendapatan (Rp)',
                         data: revenues,
                         backgroundColor: gradient,
-                        borderColor: 'rgba(59, 130, 246, 0.9)',
+                        borderColor: 'rgba(16, 185, 129, 0.9)',
                         borderWidth: 1.5,
                         borderRadius: 5,
                         yAxisID: 'yRevenue',

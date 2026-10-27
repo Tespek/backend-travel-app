@@ -7,13 +7,6 @@
             <h1 class="text-2xl font-bold text-slate-800">Titik Penjemputan Penumpang</h1>
             <p class="text-sm text-slate-500 mt-1">Kelola lokasi pool, shelter, atau titik kumpul resmi travel Anda beserta titik koordinat GPS.</p>
         </div>
-        <a href="{{ route('admin-travel.pickup-points.create') }}"
-           class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors shadow-sm self-start sm:self-auto">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            Tambah Titik Jemput
-        </a>
     </div>
 
     <!-- Filter Bar & Search -->
@@ -157,9 +150,6 @@
                                 </svg>
                                 <p class="text-sm font-medium text-slate-600">Belum ada titik penjemputan yang terdaftar.</p>
                                 <p class="text-xs text-slate-400 mt-1">Daftarkan pool atau shelter penjemputan agar penumpang dapat memilih lokasi naik mobil.</p>
-                                <a href="{{ route('admin-travel.pickup-points.create') }}" class="mt-4 text-xs font-semibold text-blue-600 hover:text-blue-700">
-                                    + Tambah Titik Jemput Sekarang
-                                </a>
                             </div>
                         </td>
                     </tr>

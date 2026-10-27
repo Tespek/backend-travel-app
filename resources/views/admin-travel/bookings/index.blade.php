@@ -27,7 +27,7 @@
                     Menunggu Bayar ({{ $counts['pending'] }})
                 </a>
                 <a href="{{ route('admin-travel.bookings.index', array_filter(['pickup_status' => 'completed', 'search' => $search])) }}"
-                   class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ $pickupStatus === 'completed' ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-700 hover:bg-blue-100' }}">
+                   class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ $pickupStatus === 'completed' ? 'bg-teal-600 text-white' : 'bg-teal-50 text-teal-700 hover:bg-teal-100' }}">
                     Selesai ({{ $counts['completed'] }})
                 </a>
             </div>
@@ -37,7 +37,7 @@
                 <div class="relative">
                     <input type="text" name="search" value="{{ $search }}"
                            placeholder="Cari kode booking, nama, HP..."
-                           class="w-full pl-9 pr-4 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                           class="w-full pl-9 pr-4 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                     <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
