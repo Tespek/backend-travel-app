@@ -15,11 +15,11 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'phone' => 'nullable|string|max:20',
-            'role' => 'nullable|in:customer,driver', // Hanya boleh daftar sebagai customer atau driver
+            'phone'    => 'nullable|string|max:20',
+            'role'     => 'nullable|in:customer,driver',
         ]);
 
         if ($validator->fails()) {
@@ -27,21 +27,20 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'role' => $request->role ?? 'customer', // Default ke customer
-            'status' => 'active',
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => Hash::make($request->password),
+            'phone'     => $request->phone,
+            'role'      => $request->role ?? 'customer',
+            'is_active' => 1,
         ]);
 
-        // Buat token Sanctum
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'Registrasi berhasil',
-            'user' => $user,
-            'token' => $token,
+            'user'    => $user,
+            'token'   => $token,
         ], 201);
     }
 
@@ -49,7 +48,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
@@ -62,20 +61,19 @@ class AuthController extends Controller
         }
 
         // Cek apakah akun diblokir
-        if ($user->status !== 'active') {
+        if (! $user->is_active) {
             return response()->json(['message' => 'Akun Anda telah diblokir.'], 403);
         }
 
-        // Hapus token lama (opsional, agar 1 device 1 token)
+        // Hapus token lama (1 device 1 token)
         $user->tokens()->delete();
 
-        // Buat token baru
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login berhasil',
-            'user' => $user,
-            'token' => $token,
+            'user'    => $user,
+            'token'   => $token,
         ]);
     }
 
