@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,6 +12,9 @@ use App\Http\Controllers\Api\AuthController;
 */
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/cities', [CityController::class, 'index']);
+Route::get('/schedules/search', [ScheduleController::class, 'search']);
 
 /*
 |--------------------------------------------------------------------------

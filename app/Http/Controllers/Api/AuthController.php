@@ -32,7 +32,7 @@ class AuthController extends Controller
             'password'  => Hash::make($request->password),
             'phone'     => $request->phone,
             'role'      => $request->role ?? 'customer',
-            'is_active' => 1,
+            'status'    => 'active',
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -60,8 +60,8 @@ class AuthController extends Controller
             ]);
         }
 
-        // Cek apakah akun diblokir
-        if (! $user->is_active) {
+        // Cek apakah akun diblokir (kolom status: 'active' | 'banned')
+        if ($user->status === 'banned') {
             return response()->json(['message' => 'Akun Anda telah diblokir.'], 403);
         }
 
