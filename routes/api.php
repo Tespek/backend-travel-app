@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\BookingController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +17,12 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/cities', [CityController::class, 'index']);
 Route::get('/schedules/search', [ScheduleController::class, 'search']);
+
+// Booking
+Route::get('/bookings', [BookingController::class, 'index']);
+Route::post('/bookings', [BookingController::class, 'store']);
+Route::get('/bookings/{id}', [BookingController::class, 'show']);
+
 
 /*
 |--------------------------------------------------------------------------
