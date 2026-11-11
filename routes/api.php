@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\PaymentController;
 
 
 /*
@@ -18,12 +19,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/cities', [CityController::class, 'index']);
 Route::get('/schedules/search', [ScheduleController::class, 'search']);
 
-// Booking
-Route::get('/bookings', [BookingController::class, 'index']);
-Route::post('/bookings', [BookingController::class, 'store']);
-Route::get('/bookings/{id}', [BookingController::class, 'show']);
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes (Protected - Butuh Login / Bearer Token)
@@ -31,9 +26,19 @@ Route::get('/bookings/{id}', [BookingController::class, 'show']);
 */
 Route::middleware('auth:sanctum')->group(function () {
     
-    // Logout & Get Profile (Bisa diakses semua role yang sudah login)
+    // Logout & Get Profile
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+
+    // Booking
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::post('/bookings', [BookingController::class, 'store']);
+    Route::get('/bookings/{id}', [BookingController::class, 'show']);
+
+    // Payment Midtrans
+    Route::post('/payment/create', [PaymentController::class, 'createTransaction']);
+    Route::post('/payment/status', [PaymentController::class, 'updateStatus']);
 
     // Contoh Route Khusus Customer
     Route::middleware('role:customer')->prefix('customer')->group(function () {

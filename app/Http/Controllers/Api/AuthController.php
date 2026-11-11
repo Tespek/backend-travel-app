@@ -39,7 +39,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Registrasi berhasil',
-            'user'    => $user,
+            'user'    => $user->load('operator'),
             'token'   => $token,
         ], 201);
     }
@@ -72,7 +72,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Login berhasil',
-            'user'    => $user,
+            'user'    => $user->load('operator'),
             'token'   => $token,
         ]);
     }
@@ -91,6 +91,25 @@ class AuthController extends Controller
     // 4. Get User Profile (Untuk testing)
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        return response()->json($request->user()->load('operator'));    }
+
+    // 5. Update Profile
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $user = $request->user();
+        $user->update([
+            'name'  => $request->name,
+            'phone' => $request->phone,
+        ]);
+
+        return response()->json([
+            'message' => 'Profil berhasil diperbarui',
+            'user'    => $user,
+        ]);
     }
 }

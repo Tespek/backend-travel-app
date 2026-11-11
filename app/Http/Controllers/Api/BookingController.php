@@ -32,13 +32,13 @@ class BookingController extends Controller
                         'departure_date' => $booking->schedule->departure_date,
                         'departure_time' => $booking->schedule->departure_time,
                         'route' => [
-                            'origin'      => $booking->schedule->route->origin_name,
-                            'destination' => $booking->schedule->route->destination_name,
+                            'origin'      => $booking->schedule->route->origin ?? $booking->schedule->route->origin_name ?? '-',
+                            'destination' => $booking->schedule->route->destination ?? $booking->schedule->route->destination_name ?? '-',
                             'price'       => $booking->schedule->route->price,
                         ],
                         'vehicle' => [
-                            'brand'        => $booking->schedule->vehicle->brand,
-                            'plate_number' => $booking->schedule->vehicle->plate_number,
+                            'brand'        => $booking->schedule->vehicle->brand ?? '-',
+                            'plate_number' => $booking->schedule->vehicle->plate_number ?? '-',
                         ],
                     ],
                 ];
