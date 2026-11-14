@@ -198,7 +198,7 @@ class BookingController extends Controller
     public function updatePickupStatus(Request $request, $id)
     {
         $request->validate([
-            'pickup_status' => 'required|in:waiting,boarded,completed',
+            'pickup_status' => 'required|in:waiting,driver_assigned,on_the_way,arrived,picked_up,completed,cancelled',
         ]);
 
         Booking::findOrFail($id)->update([

@@ -32,6 +32,8 @@ class PaymentController extends Controller
             'passengers.*.phone'     => 'nullable|string|max:20',
             'passengers.*.seat'      => 'required|integer',
             'passengers.*.address'   => 'nullable|string',
+            'passengers.*.latitude'  => 'nullable|numeric',
+            'passengers.*.longitude' => 'nullable|numeric',
             'payment_method'   => 'required|in:bca,qris,ewallet,midtrans',
         ]);
 
@@ -71,6 +73,8 @@ class PaymentController extends Controller
                 'seat_number'     => $p['seat'],
                 'pickup_type'     => !empty($p['address']) ? 'door_to_door' : 'pool',
                 'pickup_address'  => $p['address'] ?? null,
+                'pickup_latitude'  => $p['latitude'] ?? null,
+                'pickup_longitude' => $p['longitude'] ?? null,
                 'total_price'     => $pricePerTicket + ($index === 0 ? $adminFee : 0),
                 'payment_status'  => 'pending',
                 'payment_method'  => 'midtrans',
