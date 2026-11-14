@@ -18,6 +18,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/cities', [CityController::class, 'index']);
 Route::get('/schedules/search', [ScheduleController::class, 'search']);
+Route::get('/schedules/{id}/booked-seats', [BookingController::class, 'bookedSeats']);
 
 /*
 |--------------------------------------------------------------------------
@@ -35,12 +36,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/bookings/{id}', [BookingController::class, 'show']);
-
+    
     // Payment Midtrans
     Route::post('/payment/create', [PaymentController::class, 'createTransaction']);
     Route::post('/payment/status', [PaymentController::class, 'updateStatus']);
+    Route::get('/driver/schedule', [BookingController::class, 'driverSchedule']);
+    Route::get('/driver/schedule/{scheduleId}/passengers', [BookingController::class, 'driverPassengers']);
+    Route::patch('/bookings/{id}/pickup-status', [BookingController::class, 'updatePickupStatus']);
 
     // Contoh Route Khusus Customer
+    Route::get('/driver/schedule/history', [BookingController::class, 'driverScheduleHistory']);
+
+    // Route Khusus Customer
     Route::middleware('role:customer')->prefix('customer')->group(function () {
         Route::get('/dashboard', function () {
             return response()->json(['message' => 'Halo Customer, ini dashboard kamu!']);

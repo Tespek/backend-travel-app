@@ -108,4 +108,103 @@ class BookingController extends Controller
 
         return response()->json(['data' => $booking]);
     }
+    public function bookedSeats($scheduleId)
+    {
+        $seats = Booking::where('schedule_id', $scheduleId)
+            ->whereIn('payment_status', ['pending', 'paid'])
+            ->pluck('seat_number')
+            ->toArray();
+
+        return response()->json(['data' => $seats]);
+    }
+    public function driverPassengers($scheduleId)
+    {
+        $bookings = Booking::where('schedule_id', $scheduleId)
+            ->whereIn('payment_status', ['pending', 'paid'])
+            ->get(['id', 'passenger_name', 'passenger_phone', 'seat_number',
+                    'pickup_type', 'pickup_address', 'pickup_latitude',
+                    'pickup_longitude', 'pickup_status']);
+
+        return response()->json(['data' => $bookings]);
+    }
+    public function driverSchedule(Request $request)
+    {
+        $user = $request->user();
+
+        $schedule = \App\Models\Schedule::with(['route', 'vehicle'])
+            ->whereHas('bookings', function ($q) use ($user) {
+                $q->where('driver_id', $user->id)
+                ->whereIn('payment_status', ['pending', 'paid']);
+            })
+            ->whereDate('departure_date', today())
+            ->first();
+
+        if (!$schedule) {
+            // Kalau tidak ada berdasarkan driver_id, ambil jadwal hari ini milik operator
+            $schedule = \App\Models\Schedule::with(['route', 'vehicle'])
+                ->whereDate('departure_date', today())
+                ->where('status', 'open')
+                ->first();
+        }
+
+        if (!$schedule) {
+            return response()->json(['data' => null]);
+        }
+
+        $passengerCount = \App\Models\Booking::where('schedule_id', $schedule->id)
+            ->whereIn('payment_status', ['pending', 'paid'])
+            ->count();
+
+        return response()->json([
+            'data' => [
+                'id'               => $schedule->id,
+                'departure_date'   => $schedule->departure_date,
+                'departure_time'   => $schedule->departure_time,
+                'origin'           => $schedule->route->origin ?? '-',
+                'destination'      => $schedule->route->destination ?? '-',
+                'vehicle_brand'    => $schedule->vehicle->brand ?? '-',
+                'vehicle_capacity' => $schedule->vehicle->capacity ?? 0,
+                'passenger_count'  => $passengerCount,
+            ]
+        ]);
+    }
+    public function driverScheduleHistory(Request $request)
+    {
+        $user = $request->user();
+
+        $schedules = \App\Models\Schedule::with(['route', 'vehicle'])
+            ->whereHas('bookings', function ($q) use ($user) {
+                $q->where('driver_id', $user->id)
+                ->where('pickup_status', 'completed');
+            })
+            ->orderBy('departure_date', 'desc')
+            ->get()
+            ->map(function ($s) {
+                $count = \App\Models\Booking::where('schedule_id', $s->id)
+                    ->where('pickup_status', 'completed')->count();
+                return [
+                    'id'              => $s->id,
+                    'departure_date'  => $s->departure_date,
+                    'departure_time'  => $s->departure_time,
+                    'origin'          => $s->route->origin ?? '-',
+                    'destination'     => $s->route->destination ?? '-',
+                    'vehicle_brand'   => $s->vehicle->brand ?? '-',
+                    'passenger_count' => $count,
+                ];
+            });
+        return response()->json(['data' => $schedules]);
+    }
+
+    public function updatePickupStatus(Request $request, $id)
+    {
+        $request->validate([
+            'pickup_status' => 'required|in:waiting,boarded,completed',
+        ]);
+
+        Booking::findOrFail($id)->update([
+            'pickup_status' => $request->pickup_status,
+        ]);
+
+        return response()->json(['message' => 'Status updated']);
+    }
 }

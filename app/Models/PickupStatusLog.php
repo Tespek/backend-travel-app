@@ -11,6 +11,7 @@ class PickupStatusLog extends Model
 
     protected $fillable = [
         'booking_id',
+        'user_id',
         'status',
         'note',
         'latitude',
@@ -25,5 +26,9 @@ class PickupStatusLog extends Model
     public function booking()
     {
         return $this->belongsTo(Booking::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 }

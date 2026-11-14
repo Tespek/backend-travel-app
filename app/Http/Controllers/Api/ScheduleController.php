@@ -31,6 +31,7 @@ class ScheduleController extends Controller
         $schedules = Schedule::with([
             'route.originCity',
             'route.destinationCity',
+            'route.operator',
             'vehicle',
         ])
             ->open()
@@ -67,6 +68,10 @@ class ScheduleController extends Controller
                         'brand' => $schedule->vehicle->brand ?? '-',
                         'plate_number' => $schedule->vehicle->plate_number ?? '-',
                         'capacity' => $schedule->vehicle->capacity,
+                    ],
+                    'operator' => [
+                        'id'   => $schedule->route->operator->id ?? null,
+                        'name' => $schedule->route->operator->name ?? '-',
                     ],
                 ];
             });

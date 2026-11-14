@@ -122,7 +122,7 @@ class PaymentController extends Controller
     public function updateStatus(Request $request)
     {
         $request->validate([
-            'booking_code'     => 'required|string',
+            'booking_code'       => 'required|string',
             'transaction_status' => 'required|string',
         ]);
 
@@ -133,20 +133,24 @@ class PaymentController extends Controller
             default                 => 'failed',
         };
 
-        Booking::where('payment_gateway_ref', $request->booking_code)
-            ->update([
+        // Ambil semua booking dengan payment_gateway_ref ini
+        $bookings = Booking::where('payment_gateway_ref', $request->booking_code)->get();
+
+        foreach ($bookings as $booking) {
+            $booking->update([
                 'payment_status' => $paymentStatus,
                 'paid_at'        => $paymentStatus === 'paid' ? now() : null,
             ]);
 
-        // Kurangi available_seats jika paid
-        if ($paymentStatus === 'paid') {
-            $booking = Booking::where('payment_gateway_ref', $request->booking_code)->first();
-            if ($booking) {
+            // Kurangi available_seats per booking jika paid
+            if ($paymentStatus === 'paid') {
                 Schedule::find($booking->schedule_id)?->decrement('available_seats');
             }
         }
 
-        return response()->json(['message' => 'Status updated']);
+        return response()->json([
+            'message' => 'Status updated',
+            'updated' => $bookings->count(),
+        ]);
     }
 }
